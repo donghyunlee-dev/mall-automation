@@ -1,0 +1,99 @@
+name: Frontend Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "frontend/**"
+      - ".github/workflows/frontend-deploy.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: frontend-deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  AWS_REGION: ap-northeast-2
+  S3_BUCKET_URI: s3://sfood-mall-automation-prod-055043225767-ap-northeast-2-an
+  CLOUDFRONT_DISTRIBUTION_ID: E1CRT0Z82Q2YKQ
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: frontend
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v6
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Validate deploy target
+        run: |
+          if [ "${S3_BUCKET_URI}" = "s3://CHANGE_ME" ]; then
+            echo "Set S3_BUCKET_URI in .github/workflows/frontend-deploy.yml"
+            exit 1
+          fi
+
+          if [ "${CLOUDFRONT_DISTRIBUTION_ID}" = "CHANGE_ME" ]; then
+            echo "Set CLOUDFRONT_DISTRIBUTION_ID in .github/workflows/frontend-deploy.yml"
+            exit 1
+          fi
+
+      - name: Write production environment
+        env:
+          VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
+          VITE_DASHBOARD_URL: ${{ vars.VITE_DASHBOARD_URL }}
+          VITE_TEAMS_WEBHOOK_URL: ${{ secrets.VITE_TEAMS_WEBHOOK_URL }}
+          VITE_AX_AUTH_BASE_URL: ${{ secrets.VITE_AX_AUTH_BASE_URL }}
+          VITE_AX_CLIENT_ID: ${{ secrets.VITE_AX_CLIENT_ID }}
+          VITE_AX_REDIRECT_URI: ${{ secrets.VITE_AX_REDIRECT_URI }}
+        run: |
+          if [ -z "${VITE_DASHBOARD_URL}" ]; then
+            echo "Set repository variable VITE_DASHBOARD_URL"
+            exit 1
+          fi
+
+          if [ -z "${VITE_AX_AUTH_BASE_URL}" ] || [ -z "${VITE_AX_CLIENT_ID}" ] || [ -z "${VITE_AX_REDIRECT_URI}" ]; then
+            echo "Set repository secrets VITE_AX_AUTH_BASE_URL, VITE_AX_CLIENT_ID, VITE_AX_REDIRECT_URI"
+            exit 1
+          fi
+
+          {
+            printf 'VITE_API_BASE_URL=%s\n' "${VITE_API_BASE_URL}"
+            printf 'VITE_DASHBOARD_URL=%s\n' "${VITE_DASHBOARD_URL}"
+            printf 'VITE_TEAMS_WEBHOOK_URL=%s\n' "${VITE_TEAMS_WEBHOOK_URL}"
+            printf 'VITE_AX_AUTH_BASE_URL=%s\n' "${VITE_AX_AUTH_BASE_URL}"
+            printf 'VITE_AX_CLIENT_ID=%s\n' "${VITE_AX_CLIENT_ID}"
+            printf 'VITE_AX_REDIRECT_URI=%s\n' "${VITE_AX_REDIRECT_URI}"
+          } > .env.production
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Upload to S3
+        run: aws s3 sync dist/ "${S3_BUCKET_URI}" --delete
+
+      - name: Invalidate CloudFront
+        run: aws cloudfront create-invalidation --distribution-id "${CLOUDFRONT_DISTRIBUTION_ID}" --paths "/*"

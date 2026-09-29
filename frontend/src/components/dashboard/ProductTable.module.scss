@@ -1,0 +1,321 @@
+@use '../../styles/variables';
+
+.tableFixed {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.tableWrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  min-height: calc(36px * var(--product-visible-rows, 10));
+
+  table {
+    width: 100%;
+    min-width: 960px;
+    border-collapse: collapse;
+    table-layout: fixed;
+  }
+
+  th {
+    padding: 7px 11px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text2);
+    background: var(--surface3);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-align: left;
+  }
+
+  th.cellCenter {
+    text-align: center;
+  }
+
+  td {
+    padding: 7px 11px;
+    border-bottom: 0.5px solid var(--border);
+    vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--text);
+    font-size: 14px;
+  }
+
+  tr:last-child:not(.emptyRow) td {
+    border-bottom: none;
+  }
+
+  tr:hover td {
+    background: var(--surface2);
+  }
+
+  .emptyRow td {
+    padding: 0;
+    height: 36px;
+    border-bottom: 0.5px solid var(--border);
+    box-sizing: border-box;
+  }
+
+  .emptyRow:last-child td {
+    border-bottom: 0.5px solid var(--border) !important;
+  }
+
+  .emptyRow:hover td {
+    background: transparent;
+  }
+
+  tr:hover .rowActs {
+    opacity: 1;
+  }
+}
+
+.cellCenter {
+  text-align: center;
+}
+
+.sortable {
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+
+  &:hover {
+    background: var(--surface2);
+    color: var(--text);
+  }
+}
+
+.sortIcon {
+  display: inline-block;
+  margin-left: 4px;
+  font-style: normal;
+  font-size: 10px;
+  vertical-align: middle;
+  opacity: 0.5;
+}
+
+.stateCell {
+  text-align: center;
+  height: calc(36px * var(--product-visible-rows, 10));
+  padding: 2rem;
+  color: var(--text3);
+  font-size: 13px;
+}
+
+// 뱃지
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: var(--r-md);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  line-height: 1;
+  box-sizing: border-box;
+  border: 0.5px solid var(--border2);
+}
+
+.badgeStatus {
+  font-weight: 500;
+}
+
+.bResS {
+  background: var(--pos-mid);
+  color: #fff;
+  border-color: color-mix(in srgb, var(--pos-mid) 35%, transparent);
+}
+
+.bOutS {
+  background: var(--coral-mid);
+  color: #fff;
+  border-color: color-mix(in srgb, var(--coral-mid) 35%, transparent);
+}
+
+.bErrS {
+  background: var(--coral-bg);
+  color: var(--coral);
+  border-color: color-mix(in srgb, var(--coral) 25%, transparent);
+}
+
+.bBlockN {
+  background: var(--pos-bg);
+  color: var(--pos);
+  border-color: color-mix(in srgb, var(--pos) 22%, transparent);
+}
+
+.bBlockY {
+  background: var(--teal-bg);
+  color: var(--teal);
+  border-color: color-mix(in srgb, var(--teal) 22%, transparent);
+}
+
+.bBlockX {
+  background: var(--surface2);
+  color: var(--text3);
+  border-color: var(--border2);
+}
+
+.bCodeOk {
+  background: var(--pos-bg);
+  color: var(--pos);
+  border-color: color-mix(in srgb, var(--pos) 22%, transparent);
+}
+
+.bCodeAllX {
+  background: var(--teal-bg);
+  color: var(--teal);
+  border-color: color-mix(in srgb, var(--teal) 22%, transparent);
+}
+
+.bCodeErpX {
+  background: var(--surface2);
+  color: var(--text2);
+  border-color: var(--border2);
+}
+
+.bCodeGodoX {
+  background: var(--surface2);
+  color: var(--text2);
+  border-color: var(--border2);
+}
+
+.bG {
+  background: var(--surface2);
+  color: var(--text2);
+}
+
+.bE {
+  background: var(--purple-bg);
+  color: var(--purple);
+  border-color: color-mix(in srgb, var(--purple) 22%, transparent);
+}
+
+.timeText {
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.saleStatusButton {
+  font-family: inherit;
+  cursor: default;
+}
+
+.saleStatusInteractive {
+  cursor: pointer;
+  transition: transform 0.08s, opacity 0.12s, box-shadow 0.12s;
+
+  &:hover {
+    opacity: 0.9;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.06);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.saleStatusButton:disabled {
+  cursor: default;
+}
+
+// 행 액션
+.actsCell {
+  width: 72px;
+  min-width: 72px;
+  overflow: visible !important;
+  padding-right: 10px;
+}
+
+.blockCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.blockToggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  padding: 0 10px;
+  border-radius: var(--r-md);
+  font-size: 11px;
+  font-weight: 600;
+  font-family: inherit;
+  white-space: nowrap;
+  line-height: 1;
+  box-sizing: border-box;
+  border-width: 0.5px;
+  border-style: solid;
+  cursor: default;
+}
+
+.blockToggleInteractive {
+  cursor: pointer;
+  transition: transform 0.08s, opacity 0.12s;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.rowActs {
+  display: flex;
+  gap: 3px;
+  opacity: 0;
+  transition: opacity 0.12s;
+  justify-content: center;
+
+  @media (hover: none) and (pointer: coarse) {
+    opacity: 1;
+  }
+}
+
+.rowBtn {
+  height: 24px;
+  padding: 0 6px;
+  border-radius: var(--r-sm);
+  font-size: 10px;
+  cursor: pointer;
+  font-family: inherit;
+  border: 0.5px solid var(--border2);
+  background: var(--surface);
+  color: var(--text3);
+  transition: background 0.1s, color 0.1s;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  &:hover {
+    background: var(--surface2);
+    color: var(--text);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: default;
+    background: var(--surface);
+    color: var(--text3);
+  }
+}
+
+
+.del:hover {
+  background: var(--coral-bg);
+  color: var(--coral);
+  border-color: color-mix(in srgb, var(--coral) 30%, transparent);
+}

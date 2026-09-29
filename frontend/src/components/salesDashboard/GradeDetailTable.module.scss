@@ -1,0 +1,28 @@
+@use '../../styles/variables';
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+
+  th,
+  td {
+    padding: 0.5rem 0.6rem;
+    border-bottom: 1px solid var(--border);
+    text-align: right;
+  }
+
+  th:first-child,
+  td:first-child {
+    text-align: left;
+  }
+
+  thead th {
+    color: var(--text2);
+    font-weight: 600;
+  }
+}
+
+.totalRow {
+  font-weight: 700;
+}

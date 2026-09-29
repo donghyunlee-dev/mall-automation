@@ -1,0 +1,11 @@
+- Added `remain_valid_days` to `common_status_config`, `goods`, and `goods_status_log` in both SQLite and PostgreSQL schema/resources.
+- Goods registration and common-config synchronization now populate `remainValidDays` alongside `availableQty` and `safetyRate`.
+- WMS DTO now reads `REMAIN_VALID_DAYS` and `TEMP_TCD`.
+- Stock refinement now applies zone filtering first, then row criteria:
+  - `FREEZE` rows use `goods.remainValidDays`
+  - non-freeze rows use `goods.safetyRate`
+- Aggregated evidence now keeps the maximum `validPercent` and maximum `remainValidDays` values together so batch logs preserve both collected signals.
+- `remainValidDays` no longer falls back to hardcoded `150` in DTO/domain compatibility constructors; goods now follow `common_status_config` the same way `safetyRate` does.
+- SQLite compatibility was extended in non-prod bootstrap/test helpers so existing local databases upgrade safely before tests run, including legacy `goods_status_log.valid_percent NOT NULL` schemas.
+- Next Steps:
+  - update frontend request/response handling to surface `remainValidDays` in goods/config screens if not already wired

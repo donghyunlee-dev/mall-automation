@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>에쓰푸드몰 운영 관리 — 거래처 등록 관리</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f4f4f4;--surface:#fff;--surface2:#f8f8f8;--surface3:#efefef;
+  --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.14);
+  --text:#1a1917;--text2:#6b6960;--text3:#9c9a8e;
+  --teal:#c0000a;--teal-bg:#fdecea;--teal-mid:#e8000d;
+  --pos:#0f6e56;--pos-bg:#e1f5ee;--pos-mid:#1d9e75;
+  --coral:#993c1d;--coral-bg:#faece7;--coral-mid:#d85a30;
+  --purple-bg:#eeedfe;--purple:#534ab7;
+  --r-sm:6px;--r-md:8px;--r-lg:12px;--r-xl:16px;
+}
+body{font-family:'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.5;display:flex;flex-direction:column}
+
+/* ── 전역 헤더 (로고 + 아바타만, 동기화 컨트롤 없음) ── */
+header{background:var(--surface);border-bottom:0.5px solid var(--border);padding:0 1.25rem;height:52px;display:flex;align-items:center;gap:8px;position:sticky;top:0;z-index:100}
+.logo{flex:0 0 auto;font-size:18px;font-weight:700;letter-spacing:-.2px;white-space:nowrap}
+.logo em{color:var(--teal-mid);font-style:normal}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.avatar-btn{display:flex;align-items:center;gap:6px;padding:3px 6px 3px 3px;border-radius:var(--r-md);cursor:pointer;border:0.5px solid transparent;background:none;font-family:inherit}
+.avatar-btn:hover{background:var(--surface2);border-color:var(--border2)}
+.user-avatar{width:28px;height:28px;border-radius:50%;background:var(--teal-bg);border:0.5px solid rgba(200,0,11,.2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--teal-mid);flex-shrink:0}
+.avatar-btn-email{font-size:11px;color:var(--text2);white-space:nowrap}
+.avatar-caret{font-size:9px;color:var(--text3)}
+
+/* ── 탭 네비게이션 (헤더 가운데) ── */
+.hdr-tabs{flex:0 0 auto;margin-left:16px;display:flex;gap:2px;height:100%;align-items:stretch}
+.tab-nav{display:flex;align-items:center;padding:0 16px;font-size:14px;color:var(--text2);text-decoration:none;border-bottom:2px solid transparent;cursor:pointer;font-weight:500}
+.tab-nav:hover{color:var(--text)}
+.tab-nav.active{color:var(--text);border-bottom-color:var(--teal);font-weight:600}
+
+main{width:100%;padding:1rem 1.5rem 2rem;flex:1;display:flex;flex-direction:column}
+#list-view{flex:1;display:flex;flex-direction:column}
+#list-view .section:last-child{flex:1;display:flex;flex-direction:column}
+#list-view .section:last-child .ucard{flex:1;display:flex;flex-direction:column}
+.table-wrap{flex:1}
+.section{margin-bottom:.75rem}
+
+
+.ucard{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-lg);overflow:hidden;width:100%}
+.card-header{display:flex;align-items:center;gap:7px;padding:10px 14px;border-bottom:0.5px solid var(--border);flex-wrap:wrap;row-gap:6px}
+.card-title{font-size:15px;font-weight:600;white-space:nowrap}
+.card-meta{font-size:11px;color:var(--text3);white-space:nowrap}
+.hd-right{margin-left:auto;display:flex;align-items:center;gap:5px;flex-shrink:0}
+.pill{font-size:11px;border-radius:var(--r-md);padding:2px 7px;font-weight:500;white-space:nowrap}
+.pill-gray{background:var(--surface2);color:var(--text2);border:0.5px solid var(--border)}
+
+/* ── 요약 카드 (4종) ── */
+.summary-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.sum-card{padding:.85rem 1.1rem}
+.sum-label{font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:500;letter-spacing:.4px;text-transform:uppercase}
+.sum-value{font-size:24px;font-weight:500;line-height:1.2;margin-bottom:3px}
+.sum-sub{font-size:13px;color:var(--text2)}
+/* 부분집합/강조 그룹(B2B·미승인) 시작 카드 — 등급 분할 그룹과 구분선 */
+.sum-card.subgroup-start{position:relative}
+.sum-card.subgroup-start::before{content:'';position:absolute;left:-6px;top:10px;bottom:10px;width:0.5px;background:var(--border2)}
+.sum-card.clickable{cursor:pointer;transition:box-shadow .15s,transform .1s}
+.sum-card.clickable:hover{box-shadow:0 2px 10px rgba(0,0,0,.08);transform:translateY(-1px)}
+.sum-card.active{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal) inset}
+.sum-value .seg{font-weight:700}
+.sum-value .of{font-size:14px;font-weight:400;color:var(--text3);margin-left:3px}
+.sum-card.gen .seg{color:var(--text2)}
+.sum-card.biz .seg{color:var(--teal)}
+.sum-card.b2b .seg{color:var(--purple)}
+.sum-card.wait .seg{color:var(--coral-mid)}
+
+/* ── 검색/필터 ── */
+.search-row{display:flex;align-items:center;gap:7px;padding:8px 14px;border-bottom:0.5px solid var(--border);flex-wrap:wrap;row-gap:7px}
+.sel{height:26px;padding:0 8px;border:0.5px solid var(--border2);border-radius:var(--r-sm);font-size:12px;font-weight:500;background:#fff;color:var(--text);font-family:inherit;outline:none;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.sel:hover{border-color:rgba(0,0,0,.18)}
+.sel:focus{border-color:rgba(0,0,0,.18)}
+.search-wrap{position:relative;flex:1;min-width:160px;max-width:300px}
+.search-icon{position:absolute;left:8px;top:50%;transform:translateY(-50%);width:12px;height:12px;color:var(--text3);pointer-events:none}
+.search-input{width:100%;height:30px;padding:0 26px 0 27px;font-size:13px;border:0.5px solid var(--border2);border-radius:var(--r-md);background:var(--surface2);color:var(--text);outline:none;font-family:inherit}
+.search-clear{position:absolute;right:7px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text3);font-size:15px;line-height:1;display:none;padding:0}
+.search-clear:hover{color:var(--text2)}
+.search-input:focus{border-color:var(--teal-mid);background:var(--surface)}
+.search-input::placeholder{color:var(--text3)}
+.flbl{font-size:11px;color:var(--text3);font-weight:600;white-space:nowrap}
+.filter-group{display:flex;align-items:center;gap:4px}
+.filter-sep{width:0.5px;height:16px;background:var(--border2);margin:0 4px;flex-shrink:0}
+.fbtn{height:26px;padding:0 10px;border:0.5px solid var(--border2);border-radius:var(--r-sm);font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;background:var(--surface);color:var(--text2);transition:background .12s,color .12s,border-color .12s;white-space:nowrap}
+.fbtn:hover{background:var(--surface2)}
+.fbtn.active{background:var(--surface);color:var(--text);border-color:var(--text);font-weight:600}
+.fbtn.preset.active{background:var(--teal-bg);color:var(--teal);border-color:var(--teal)}
+/* 필터 버튼 색을 목록 배지 색과 일치 (hover·active 시 노출) */
+.fbtn.f-gen:hover,.fbtn.f-gen.active{background:var(--surface2);color:var(--text2);border-color:var(--border2)}
+.fbtn.f-biz:hover,.fbtn.f-biz.active{background:var(--teal-bg);color:var(--teal);border-color:var(--teal)}
+.fbtn.f-b2b:hover,.fbtn.f-b2b.active{background:var(--purple-bg);color:var(--purple);border-color:var(--purple)}
+.fbtn.f-on:hover,.fbtn.f-on.active{background:var(--pos-bg);color:var(--pos);border-color:rgba(15,110,86,.45)}
+.fbtn.f-wait:hover,.fbtn.f-wait.active{background:var(--coral-bg);color:var(--coral);border-color:rgba(153,60,29,.45)}
+.date-input{height:30px;padding:0 8px;border:0.5px solid var(--border2);border-radius:var(--r-md);font-size:12px;background:var(--surface2);color:var(--text);font-family:inherit;outline:none}
+.btn-sm{height:30px;padding:0 12px;border-radius:var(--r-md);font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;white-space:nowrap}
+.btn-primary{background:#c8000b;color:#fff;border:none}
+.btn-primary:hover{opacity:.88}
+.btn-outline{background:none;color:var(--text);border:0.5px solid var(--border2)}
+.btn-outline:hover{background:var(--surface2);color:var(--text)}
+.btn-outline.btn-godo{color:var(--text)}
+.hint{font-size:11px;color:var(--text3);padding:6px 14px 0;width:100%}
+.hint b{color:var(--coral);font-weight:600}
+
+/* ── 테이블 ── */
+.table-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;padding:7px 11px;font-size:13px;font-weight:600;color:#555;background:#ececef;border-bottom:1px solid rgba(0,0,0,0.1);letter-spacing:.3px;text-transform:uppercase;white-space:nowrap}
+td{padding:8px 11px;border-bottom:0.5px solid var(--border);vertical-align:middle;white-space:nowrap;color:var(--text);font-size:14px}
+tr.clickable-row{cursor:pointer}
+tr.clickable-row:hover td{background:var(--surface2)}
+/* hover 시 상세 이동 단서 — 셀 오른쪽 끝에 고정 (승인/미승인 배지 길이와 무관) */
+tr.clickable-row td:last-child{position:relative;padding-right:24px}
+tr.clickable-row td:last-child::after{content:'›';position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--text3);font-weight:700;opacity:0;transition:opacity .12s}
+tr.clickable-row:hover td:last-child::after{opacity:1}
+th.col-check,td.col-check{text-align:center;padding:8px 6px}
+input.tbl-check{width:15px;height:15px;cursor:pointer;accent-color:var(--teal-mid);vertical-align:middle}
+td.col-check{border-bottom:0.5px solid var(--border)}
+th.sortable{cursor:pointer;user-select:none}
+th.sortable:hover{background:#e2e2e6;color:#222}
+th.sortable .sort-icon{display:inline-block;margin-left:4px;opacity:.35;font-style:normal;font-size:10px}
+th.sortable.desc .sort-icon::after{content:'↓';opacity:1}
+th.sortable:not(.asc):not(.desc) .sort-icon::after{content:'↕'}
+.result-lbl{font-size:11px;color:var(--text3);padding:7px 14px;border-bottom:0.5px solid var(--border)}
+.result-bar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 14px;border-bottom:0.5px solid var(--border)}
+.result-lbl-inline{font-size:11px;color:var(--text3)}
+.godo-link{color:var(--teal-mid);font-size:11px;text-decoration:none;cursor:pointer}
+.godo-link:hover{text-decoration:underline}
+
+/* ── 등급/승인 배지 ── */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:var(--r-md);font-size:11px;font-weight:500;white-space:nowrap;line-height:1.6}
+.b-gen{background:var(--surface2);color:var(--text2);border:0.5px solid var(--border)}
+.b-biz{background:var(--teal-bg);color:var(--teal)}
+.b-b2b{background:var(--purple-bg);color:var(--purple)}
+.b-on{background:var(--pos-bg);color:var(--pos)}
+.b-wait{background:var(--coral-bg);color:var(--coral)}
+
+/* ── 페이지 크기 커스텀 드롭다운 ── */
+.page-size-wrap{position:relative;flex-shrink:0}
+.page-size-btn{display:flex;align-items:center;gap:4px;height:26px;padding:0 10px;border:0.5px solid var(--border2);border-radius:var(--r-sm);font-size:12px;font-weight:500;background:#fff;color:var(--text);cursor:pointer;font-family:inherit;white-space:nowrap;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.page-size-btn:hover{border-color:rgba(0,0,0,.18)}
+.page-size-caret{font-size:10px;color:var(--text3)}
+.page-size-dropdown{position:absolute;top:calc(100% + 6px);right:0;background:#fff;border:0.5px solid var(--border2);border-radius:var(--r-md);overflow:hidden;box-shadow:0 10px 24px rgba(0,0,0,.08);z-index:50;display:none;min-width:100%}
+.page-size-dropdown.open{display:block}
+.page-size-opt{display:block;width:100%;height:32px;padding:0 10px;font-size:12px;font-weight:500;color:var(--text2);background:none;border:none;cursor:pointer;font-family:inherit;text-align:left;white-space:nowrap}
+.page-size-opt:hover{background:var(--surface2);color:var(--text)}
+.page-size-opt.selected{background:var(--surface2);color:var(--text);font-weight:600}
+
+/* ── 페이지네이션 ── */
+.pagination{display:flex;align-items:center;justify-content:center;gap:3px;padding:9px 14px;border-top:0.5px solid var(--border);flex-wrap:wrap}
+.pg-btn{border:0.5px solid var(--border2);background:none;border-radius:var(--r-md);padding:4px 8px;font-size:11px;cursor:pointer;color:var(--text);font-family:inherit;min-width:26px;text-align:center}
+.pg-btn:hover:not(:disabled){background:var(--surface2)}
+.pg-btn.active{background:var(--teal-bg);color:var(--teal);border-color:transparent;font-weight:500}
+.pg-btn:disabled{opacity:.3;cursor:default}
+
+/* ── 회원 상세 ── */
+.detail-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:1.1rem;padding-bottom:.9rem;border-bottom:0.5px solid var(--border)}
+.detail-name{font-size:17px;font-weight:600}
+.detail-actions{margin-left:auto;display:flex;gap:7px;align-items:center}
+.modal.modal-lg{max-width:860px;padding:1.5rem}
+.modal-close{background:none;border:none;font-size:26px;line-height:1;cursor:pointer;color:var(--text3);padding:4px 8px;margin-left:4px}
+.modal-close:hover{color:var(--text)}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;align-items:start}
+.info-card{padding:0}
+.info-body{padding:4px 14px 10px}
+.info-row{display:grid;grid-template-columns:124px 1fr;gap:8px;padding:7px 0;font-size:13px;border-bottom:0.5px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-label{color:var(--text2);font-size:12px;white-space:nowrap}
+.info-value{color:var(--text);word-break:break-all}
+.info-value.empty{color:var(--text3)}
+.info-body.cols2{display:grid;grid-template-columns:1fr 1fr;column-gap:24px}
+.info-body.cols2 .sub-head{grid-column:1/-1}
+.info-body.split{display:grid;grid-template-columns:1fr 1fr;column-gap:24px;align-items:start}
+.info-body.split .sub-head{border-top:none;margin-top:0}
+.sub-head{padding:12px 0 4px;margin-top:8px;font-size:11px;font-weight:700;letter-spacing:.02em;color:var(--text2);border-top:0.5px solid var(--border2)}
+.readonly-note{font-size:11px;color:var(--text3);padding:0 14px 10px}
+.info-input{width:100%;height:28px;padding:0 8px;border:0.5px solid var(--border2);border-radius:var(--r-md);font-size:13px;background:var(--surface2);color:var(--text);outline:none;font-family:inherit}
+.info-input:focus{border-color:var(--teal-mid);background:var(--surface)}
+.info-row .type-sel{gap:6px}
+.info-row .type-opt{height:28px;font-size:12px;padding:0 10px;flex:none}
+#p-reg-y.on,#p-tax-y.on{background:var(--pos-bg);color:var(--pos);border-color:var(--pos-mid)}
+
+/* ── 운영 메모 ── */
+.memo-body{padding:10px 14px 12px;display:flex;flex-direction:column;gap:8px}
+.memo-textarea{width:100%;min-height:88px;padding:9px 11px;border:0.5px solid var(--border2);border-radius:var(--r-md);font-size:13px;font-family:inherit;color:var(--text);background:var(--surface2);resize:vertical;outline:none;line-height:1.6}
+.memo-textarea:focus{border-color:var(--teal-mid);background:var(--surface)}
+.memo-textarea::placeholder{color:var(--text3)}
+.memo-footer{display:flex;align-items:center;justify-content:space-between}
+.memo-note{font-size:11px;color:var(--text3)}
+.memo-textarea.saved{border-color:var(--pos-mid);background:var(--pos-bg);transition:border-color .2s,background .2s}
+
+/* ── 모달 (오버레이) ── */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:200;align-items:center;justify-content:center;padding:1rem}
+.modal-bg.open{display:flex}
+.modal{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--r-xl);padding:1.25rem;width:100%;max-width:440px;max-height:90vh;overflow-y:auto}
+.modal h3{font-size:14px;font-weight:500;margin-bottom:1rem}
+.form-row{margin-bottom:.65rem}
+.form-row label{display:block;font-size:11px;color:var(--text2);margin-bottom:3px;font-weight:500}
+.form-row input{width:100%;height:36px;padding:0 10px;border:0.5px solid var(--border2);border-radius:var(--r-md);font-size:13px;background:var(--surface2);color:var(--text);outline:none;font-family:inherit}
+.form-row input:focus{border-color:var(--teal-mid);background:var(--surface)}
+.type-sel{display:flex;gap:8px}
+.type-opt{flex:1;height:38px;border:0.5px solid var(--border2);border-radius:var(--r-md);font-size:12px;cursor:pointer;font-family:inherit;background:var(--surface2);color:var(--text2)}
+.type-opt.on{background:var(--teal-bg);color:var(--teal);border-color:var(--teal);font-weight:500}
+.req{color:var(--teal);font-size:11px}
+.modal-footer{display:flex;justify-content:flex-end;gap:7px;margin-top:1.1rem}
+.btn-cancel{height:34px;padding:0 14px;background:none;border:0.5px solid var(--border2);border-radius:var(--r-md);font-size:13px;cursor:pointer;color:var(--text);font-family:inherit}
+.btn-cancel:hover{background:var(--surface2)}
+.btn-save{height:34px;padding:0 14px;background:#c8000b;color:#fff;border:none;border-radius:var(--r-md);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit}
+.btn-save:hover{opacity:.88}
+
+/* 업로드 모달 */
+.upload-zone{border:1.5px dashed var(--border2);border-radius:var(--r-lg);padding:1.5rem 1.25rem;text-align:center;background:var(--surface2);margin-bottom:.75rem}
+.detect-box{background:var(--teal-bg);border:0.5px solid rgba(200,0,11,.2);border-radius:var(--r-md);padding:10px 12px;font-size:12px;color:var(--teal);margin-bottom:.75rem}
+.chk-row{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--text2);padding:8px 0;margin-bottom:.5rem}
+.chk-row input{margin-top:2px}
+.up-file{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--surface2);border:0.5px solid var(--border);border-radius:var(--r-md);padding:9px 12px;margin-bottom:.6rem;font-size:12px}
+.up-remove{border:none;background:none;color:var(--text3);font-size:17px;cursor:pointer;line-height:1}
+.up-kind{display:flex;align-items:flex-start;gap:8px;margin-bottom:1rem}
+.up-kind-badge{flex-shrink:0;font-size:11px;font-weight:600;border-radius:var(--r-md);padding:3px 9px;background:var(--teal-bg);color:var(--teal)}
+.up-kind-badge.godo{background:var(--pos-bg);color:var(--pos)}
+.up-demo-btns{display:flex;gap:6px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.up-demo-btn{font-size:11px;color:var(--text2);border:0.5px solid var(--border2);border-radius:var(--r-sm);padding:3px 10px;background:var(--surface);cursor:pointer;font-family:inherit}
+.up-demo-btn:hover{background:var(--surface2)}
+.up-kind-desc{font-size:11px;color:var(--text2);line-height:1.5}
+.up-option{display:flex;align-items:flex-start;gap:9px;background:var(--coral-bg);border:0.5px solid rgba(153,60,29,.2);border-radius:var(--r-md);padding:11px 13px}
+.up-option input{margin-top:3px;flex-shrink:0}
+.up-option-text{font-size:12px;color:var(--text);line-height:1.5}
+.up-option-text small{display:block;color:var(--text2);font-size:11px;margin-top:2px}
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:.5rem 0}
+.result-cell{background:var(--surface2);border:0.5px solid var(--border);border-radius:var(--r-md);padding:10px 12px}
+.result-cell .rc-num{font-size:20px;font-weight:600}
+.result-cell .rc-lbl{font-size:11px;color:var(--text3)}
+.rc-fail .rc-num{color:var(--coral-mid)}
+
+@media(max-width:640px){
+  main{padding:1rem .75rem 3rem}
+  .summary-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .info-grid{grid-template-columns:1fr}
+  .info-body.cols2,.info-body.split{grid-template-columns:1fr}
+  .result-grid{grid-template-columns:1fr}
+  .avatar-btn-email,.avatar-caret{display:none}
+  .tab-nav{flex:1;text-align:center;padding:12px 8px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">에쓰푸드몰 <em>운영 관리</em></div>
+  <nav class="hdr-tabs">
+    <a class="tab-nav">상품 관리</a>
+    <a class="tab-nav active" aria-current="page">거래처 등록 관리</a>
+  </nav>
+  <div class="hdr-right">
+    <button class="avatar-btn">
+      <span class="user-avatar">강</span>
+      <span class="avatar-btn-email">sohee.kang@s-food.com</span>
+      <span class="avatar-caret">▾</span>
+    </button>
+  </div>
+</header>
+
+<main>
+  <!-- ════════════ 회원 목록 뷰 ════════════ -->
+  <div id="list-view">
+    <div class="section">
+      <div class="ucard">
+        <div class="card-header">
+          <span class="card-title">회원 목록</span>
+          <span class="pill pill-gray">23,156명</span>
+          <div class="hd-right">
+            <span class="card-meta" style="align-self:flex-end">마지막 업로드 2026-06-11 14:30</span>
+            <button class="btn-sm btn-primary" onclick="openUpload()">엑셀 업로드</button>
+            <button class="btn-sm btn-outline" onclick="downloadExcel()">엑셀 다운로드</button>
+          </div>
+        </div>
+
+        <!-- 가입일 (달력 + 빠른 선택 — 즉시 조회) -->
+        <div class="search-row">
+          <span class="flbl">가입일</span>
+          <input class="date-input" id="dt-from" type="date"/>
+          <span style="color:var(--text3)">~</span>
+          <input class="date-input" id="dt-to" type="date"/>
+          <div class="filter-group presets">
+            <button class="fbtn preset" onclick="pickPreset(this)">오늘</button>
+            <button class="fbtn preset" onclick="pickPreset(this)">일주일</button>
+            <button class="fbtn preset" onclick="pickPreset(this)">1개월</button>
+            <button class="fbtn preset" onclick="pickPreset(this)">이번달</button>
+            <button class="fbtn preset" onclick="pickPreset(this)">지난달</button>
+          </div>
+        </div>
+        <!-- 등급 + 검색 -->
+        <div class="search-row">
+          <span class="flbl">등급</span>
+          <div class="page-size-wrap" id="group-wrap">
+            <button class="page-size-btn" onclick="toggleDd('group-dd')" style="min-width:75px;justify-content:space-between">
+              <span id="group-lbl">전체</span>
+              <span class="page-size-caret">▾</span>
+            </button>
+            <div class="page-size-dropdown" id="group-dd" style="left:0;right:auto;min-width:75px">
+              <button class="page-size-opt selected" onclick="pickGroup(this,'ALL','전체')">전체</button>
+              <button class="page-size-opt" onclick="pickGroup(this,'BUSINESS','사업자')">사업자</button>
+              <button class="page-size-opt" onclick="pickGroup(this,'B2B','B2B')">B2B</button>
+            </div>
+          </div>
+          <div class="filter-sep"></div>
+          <div class="page-size-wrap" id="stype-wrap">
+            <button class="page-size-btn" onclick="toggleDd('stype-dd')" style="min-width:95px;justify-content:space-between">
+              <span id="stype-lbl">아이디</span>
+              <span class="page-size-caret">▾</span>
+            </button>
+            <div class="page-size-dropdown" id="stype-dd" style="left:0;right:auto;min-width:95px">
+              <button class="page-size-opt selected" onclick="pickStype(this,'MEM_ID','아이디')">아이디</button>
+              <button class="page-size-opt" onclick="pickStype(this,'NAME','이름')">이름</button>
+              <button class="page-size-opt" onclick="pickStype(this,'PARTNER_CODE','거래처코드')">거래처코드</button>
+              <button class="page-size-opt" onclick="pickStype(this,'PARTNER_NAME','거래처명')">거래처명</button>
+              <button class="page-size-opt" onclick="pickStype(this,'EMAIL','이메일')">이메일</button>
+              <button class="page-size-opt" onclick="pickStype(this,'CELL_PHONE','휴대폰')">휴대폰</button>
+            </div>
+          </div>
+          <div class="search-wrap">
+            <svg class="search-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6.5" cy="6.5" r="4"/><line x1="10" y1="10" x2="14" y2="14"/></svg>
+            <input class="search-input" id="kw" placeholder="" oninput="toggleClear(this)" onkeydown="if(event.key==='Enter')doSearch()"/>
+            <button class="search-clear" id="kw-clear" onclick="clearSearch()" title="검색어 지우기">×</button>
+          </div>
+          <button class="btn-sm btn-primary" onclick="doSearch()">조회</button>
+          <div style="margin-left:auto;display:flex;align-items:center;gap:8px;flex-shrink:0">
+            <div class="page-size-wrap">
+              <button class="page-size-btn" id="page-size-btn" onclick="togglePageSize()">
+                <span id="page-size-lbl">10개씩 보기</span>
+                <span class="page-size-caret">▾</span>
+              </button>
+              <div class="page-size-dropdown" id="page-size-dropdown">
+                <button class="page-size-opt selected" onclick="pickPageSize(this,10)">10개씩 보기</button>
+                <button class="page-size-opt" onclick="pickPageSize(this,20)">20개씩 보기</button>
+                <button class="page-size-opt" onclick="pickPageSize(this,30)">30개씩 보기</button>
+                <button class="page-size-opt" onclick="pickPageSize(this,50)">50개씩 보기</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table style="min-width:900px">
+            <colgroup>
+              <col style="width:1px"><col style="width:8%"><col style="width:10%"><col style="width:8%"><col style="width:11%"><col style="width:16%"><col style="width:10%"><col style="width:10%"><col style="width:13%"><col style="width:10%">
+            </colgroup>
+            <thead><tr>
+              <th class="col-check"><input type="checkbox" class="tbl-check" id="chk-all" onchange="toggleAll(this)" title="전체 선택"></th>
+              <th class="sortable desc">회원번호<i class="sort-icon"></i></th>
+              <th class="sortable">아이디<i class="sort-icon"></i></th>
+              <th>이름</th>
+              <th class="sortable">등급<i class="sort-icon"></i></th>
+              <th>이메일</th>
+              <th>휴대폰</th>
+              <th>거래처코드</th>
+              <th>거래처명</th>
+              <th class="sortable">가입일<i class="sort-icon"></i></th>
+            </tr></thead>
+            <tbody>
+              <tr class="clickable-row" onclick="showDetail('b2b','홍길동','hong123','B2B 거래처','b-b2b',true,12345)">
+                <td class="col-check" onclick="event.stopPropagation()"><input type="checkbox" class="tbl-check" onchange="toggleRow(this)"></td>
+                <td>12345</td><td>hong123 <a class="godo-link" onclick="event.stopPropagation();alert('고도몰 어드민 새 탭 (데모)')" title="고도몰">↗</a></td>
+                <td>홍*동</td><td><span class="badge b-b2b">B2B 거래처</span></td>
+                <td>ho***@example.com</td><td>010-****-5678</td>
+                <td>ERP-001</td><td>에쓰마트</td><td>2025-01-15</td>
+              </tr>
+              <tr class="clickable-row" onclick="showDetail('biz','이정수','lee789','사업자회원_레드','b-biz',true,12347)">
+                <td class="col-check" onclick="event.stopPropagation()"><input type="checkbox" class="tbl-check" onchange="toggleRow(this)"></td>
+                <td>12347</td><td>lee789</td>
+                <td>이*수</td><td><span class="badge b-biz">사업자회원_레드</span></td>
+                <td>le***@corp.kr</td><td>010-****-3456</td>
+                <td>ERP-011</td><td>코프레드</td><td>2025-03-22</td>
+              </tr>
+              <tr class="clickable-row" onclick="showDetail('biz','박미영','park22','사업자회원_화이트','b-biz',true,12348)">
+                <td class="col-check" onclick="event.stopPropagation()"><input type="checkbox" class="tbl-check" onchange="toggleRow(this)"></td>
+                <td>12348</td><td>park22</td>
+                <td>박*영</td><td><span class="badge b-biz">사업자회원_화이트</span></td>
+                <td>pa***@food.com</td><td>010-****-7890</td>
+                <td>ERP-012</td><td>화이트푸드</td><td>2025-04-08</td>
+              </tr>
+              <tr class="clickable-row" onclick="showDetail('b2b','최영','choi_b2b','B2B 거래처','b-b2b',true,12349)">
+                <td class="col-check" onclick="event.stopPropagation()"><input type="checkbox" class="tbl-check" onchange="toggleRow(this)"></td>
+                <td>12349</td><td>choi_b2b</td>
+                <td>최*</td><td><span class="badge b-b2b">B2B 거래처</span></td>
+                <td>ch***@bmart.kr</td><td>010-****-2345</td>
+                <td>ERP-002</td><td>비마트</td><td>2025-05-19</td>
+              </tr>
+              <tr class="clickable-row" onclick="showDetail('biz','정민호','jung_kf','사업자회원_VIP','b-biz',true,12350)">
+                <td class="col-check" onclick="event.stopPropagation()"><input type="checkbox" class="tbl-check" onchange="toggleRow(this)"></td>
+                <td>12350</td><td>jung_kf</td>
+                <td>정*호</td><td><span class="badge b-biz">사업자회원_VIP</span></td>
+                <td>ju***@kfood.kr</td><td>010-****-6789</td>
+                <td>ERP-013</td><td>케이푸드</td><td>2025-06-02</td>
+              </tr>
+              <tr class="clickable-row" onclick="showDetail('b2b','신미라','shin_b2b','B2B 거래처','b-b2b',true,12352)">
+                <td class="col-check" onclick="event.stopPropagation()"><input type="checkbox" class="tbl-check" onchange="toggleRow(this)"></td>
+                <td>12352</td><td>shin_b2b</td>
+                <td>신*라</td><td><span class="badge b-b2b">B2B 거래처</span></td>
+                <td>sh***@freshm.kr</td><td>010-****-4455</td>
+                <td>ERP-003</td><td>프레시마트</td><td>2025-07-01</td>
+              </tr>
+              <tr class="clickable-row" onclick="showDetail('biz','오성근','oh_trade','사업자회원_로제','b-biz',true,12353)">
+                <td class="col-check" onclick="event.stopPropagation()"><input type="checkbox" class="tbl-check" onchange="toggleRow(this)"></td>
+                <td>12353</td><td>oh_trade</td>
+                <td>오*근</td><td><span class="badge b-biz">사업자회원_로제</span></td>
+                <td>oh***@trade.kr</td><td>010-****-7788</td>
+                <td>ERP-014</td><td>오무역</td><td>2025-07-22</td>
+              </tr>
+              <tr class="clickable-row" onclick="showDetail('b2b','김민준','kim_vip','B2B 거래처','b-b2b',true,12355)">
+                <td class="col-check" onclick="event.stopPropagation()"><input type="checkbox" class="tbl-check" onchange="toggleRow(this)"></td>
+                <td>12355</td><td>kim_vip <a class="godo-link" onclick="event.stopPropagation();alert('고도몰 어드민 새 탭 (데모)')" title="고도몰">↗</a></td>
+                <td>김*준</td><td><span class="badge b-b2b">B2B 거래처</span></td>
+                <td>km***@greenmart.co.kr</td><td>010-****-1122</td>
+                <td>ERP-004</td><td>그린마트</td><td>2025-08-05</td>
+              </tr>
+              <tr class="clickable-row" onclick="showDetail('biz','유재원','yoo_biz','사업자회원_화이트','b-biz',true,12356)">
+                <td class="col-check" onclick="event.stopPropagation()"><input type="checkbox" class="tbl-check" onchange="toggleRow(this)"></td>
+                <td>12356</td><td>yoo_biz</td>
+                <td>유*원</td><td><span class="badge b-biz">사업자회원_화이트</span></td>
+                <td>yr***@udc.kr</td><td>010-****-3344</td>
+                <td>ERP-015</td><td>유통코리아</td><td>2025-09-14</td>
+              </tr>
+              <tr class="clickable-row" onclick="showDetail('b2b','한지수','han_b2b','B2B 거래처','b-b2b',true,12358)">
+                <td class="col-check" onclick="event.stopPropagation()"><input type="checkbox" class="tbl-check" onchange="toggleRow(this)"></td>
+                <td>12358</td><td>han_b2b <a class="godo-link" onclick="event.stopPropagation();alert('고도몰 어드민 새 탭 (데모)')" title="고도몰">↗</a></td>
+                <td>한*수</td><td><span class="badge b-b2b">B2B 거래처</span></td>
+                <td>hj***@kfood.co.kr</td><td>010-****-5566</td>
+                <td>ERP-005</td><td>한국식품유통</td><td>2025-10-30</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pagination">
+          <button class="pg-btn" disabled>이전</button>
+          <button class="pg-btn active">1</button>
+          <button class="pg-btn">2</button>
+          <button class="pg-btn">3</button>
+          <button class="pg-btn">…</button>
+          <button class="pg-btn">2316</button>
+          <button class="pg-btn">다음</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ════════════ 회원 상세 모달 ════════════ -->
+<div class="modal-bg" id="detail-modal" onclick="if(event.target===this)closeDetail()">
+  <div class="modal modal-lg">
+    <div class="detail-head">
+      <span class="detail-name" id="d-header-id">hong123</span>
+      <span class="badge b-b2b" id="d-grade">B2B 거래처</span>
+      <div class="detail-actions">
+        <button class="btn-sm btn-outline btn-godo" onclick="alert('고도몰 어드민 새 탭 (데모)')">고도몰 어드민 열기 ↗</button>
+        <button class="modal-close" onclick="closeDetail()" title="닫기">×</button>
+      </div>
+    </div>
+
+    <!-- 기본 정보 -->
+    <div class="section" style="margin-bottom:12px">
+      <div class="ucard info-card">
+        <div class="card-header"><span class="card-title">기본 정보</span></div>
+        <div class="info-body cols2" id="d-basic-body">
+          <div class="info-row"><span class="info-label">회원번호</span><span class="info-value" id="d-mem-no">12345</span></div>
+          <div class="info-row"><span class="info-label">아이디</span><span class="info-value" id="d-id">hong123</span></div>
+          <div class="info-row"><span class="info-label">이름</span><span class="info-value" id="d-name2">홍길동</span></div>
+          <div class="info-row"><span class="info-label">휴대폰</span><span class="info-value">010-1234-5678</span></div>
+          <div class="info-row"><span class="info-label">이메일</span><span class="info-value">hong@example.com</span></div>
+          <div class="info-row"><span class="info-label">전화</span><span class="info-value">02-123-4567</span></div>
+          <div class="info-row"><span class="info-label">주소</span><span class="info-value">06000 서울시 강남구 테헤란로 123 101호</span></div>
+          <div class="info-row"><span class="info-label">가입일 / 경로</span><span class="info-value">2025-01-15 / pc</span></div>
+          <div class="info-row"><span class="info-label">최근 접속</span><span class="info-value">2026-06-01</span></div>
+        </div>
+        <div class="readonly-note">※ 기본 정보는 읽기 전용 — 고도몰 엑셀 재업로드로만 갱신됩니다.</div>
+      </div>
+    </div>
+
+    <!-- 사업자 정보 + B2B 거래처 정보 -->
+    <div class="info-grid" id="d-biz-grid" style="margin-bottom:12px">
+      <div class="ucard info-card" id="d-card-biz">
+        <div class="card-header"><span class="card-title">사업자 정보</span></div>
+        <div class="info-body" id="d-biz-body">
+          <div class="biz-main">
+            <div class="info-row"><span class="info-label">상호</span><span class="info-value">(주)테스트</span></div>
+            <div class="info-row"><span class="info-label">사업자번호</span><span class="info-value">123-45-67890</span></div>
+            <div class="info-row"><span class="info-label">대표자명</span><span class="info-value">홍길동</span></div>
+            <div class="info-row"><span class="info-label">업태 / 종목</span><span class="info-value">도매 / 식품</span></div>
+            <div class="info-row"><span class="info-label">사업장 주소</span><span class="info-value">06000 서울시 강남구 테헤란로 123</span></div>
+            <div class="info-row"><span class="info-label">사업자등록증</span><span class="info-value"><a class="godo-link">license_hong123.pdf ↗</a></span></div>
+          </div>
+          <div class="biz-extra">
+            <div class="sub-head">추가 정보</div>
+            <div class="info-row"><span class="info-label">업종</span><span class="info-value">식품제조</span></div>
+            <div class="info-row"><span class="info-label">세금계산서 신청</span><span class="info-value">발행필요</span></div>
+            <div class="info-row"><span class="info-label">담당자</span><span class="info-value empty">—</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ucard info-card" id="d-card-b2b">
+        <div class="card-header"><span class="card-title">에쓰푸드 거래처 정보</span><div class="hd-right"><button class="btn-sm btn-primary" onclick="savePartner(this)">저장</button></div></div>
+        <div class="info-body">
+          <div class="info-row"><span class="info-label">거래처 등록</span><div class="type-sel"><button class="type-opt on" id="p-reg-y" onclick="pickPartnerReg(true)">등록됨</button><button class="type-opt" id="p-reg-n" onclick="pickPartnerReg(false)">미등록</button></div></div>
+          <div class="info-row"><span class="info-label">거래처 코드</span><input class="info-input" id="p-code" value="990954"/></div>
+          <div class="info-row"><span class="info-label">거래처명</span><input class="info-input" id="p-name" value="(에쓰푸드몰)테스트거래처"/></div>
+          <div class="info-row"><span class="info-label">세금계산서</span><div class="type-sel"><button class="type-opt on" id="p-tax-y" onclick="pickPartnerTax(true)">발행 (Y)</button><button class="type-opt" id="p-tax-n" onclick="pickPartnerTax(false)">미발행 (N)</button></div></div>
+          <div class="info-row"><span class="info-label">최종 수정</span><span class="info-value">2026-06-11 14:30</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ 파트너 수정 모달 ════════════ -->
+<div class="modal-bg" id="partner-modal" onclick="if(event.target===this)closePartner()">
+  <div class="modal">
+    <h3>파트너 정보 수정 — 홍길동 (12345)</h3>
+    <div class="form-row">
+      <label>거래처 등록 여부</label>
+      <div class="type-sel">
+        <button class="type-opt on" onclick="pickOne(this)">등록됨</button>
+        <button class="type-opt" onclick="pickOne(this)">미등록</button>
+      </div>
+    </div>
+    <div class="form-row">
+      <label>거래처 코드 <span class="req">* 등록됨 선택 시 필수</span></label>
+      <input value="990954"/>
+    </div>
+    <div class="form-row">
+      <label>거래처명</label>
+      <input value="(에쓰푸드몰)테스트거래처"/>
+    </div>
+    <div class="form-row">
+      <label>세금계산서 발행</label>
+      <div class="type-sel">
+        <button class="type-opt on" onclick="pickOne(this)">발행 (Y)</button>
+        <button class="type-opt" onclick="pickOne(this)">미발행 (N)</button>
+      </div>
+    </div>
+    <div class="form-row">
+      <label>중복 여부 확인 (선택)</label>
+      <input placeholder="예: 확인완료"/>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closePartner()">취소</button>
+      <button class="btn-save" onclick="closePartner()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ 엑셀 업로드 모달 ════════════ -->
+<div class="modal-bg" id="upload-modal" onclick="if(event.target===this)closeUpload()">
+  <div class="modal">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:1rem">
+      <div>
+        <h3 style="margin-bottom:.2rem">회원 엑셀 업로드</h3>
+        <p style="font-size:12px;color:var(--text2)">엑셀 파일을 올리면 회원 정보가 자동으로 동기화됩니다.</p>
+      </div>
+      <button class="btn-sm btn-outline" style="flex-shrink:0;font-size:12px" onclick="alert('sfood_member_template.xlsx 다운로드 (데모)')">↓ 양식 다운로드</button>
+    </div>
+
+    <!-- 단계 1: 파일 선택/인식 -->
+    <div id="upload-step-file">
+      <!-- 초기: 파일 선택 전 -->
+      <div class="upload-zone" id="up-zone">
+        📄 <b>엑셀 파일을 끌어다 놓거나 클릭</b>해서 선택하세요<br>
+        <span style="font-size:11px;color:var(--text3)">.xls · .xlsx</span>
+        <div class="up-demo-btns">
+          <button class="up-demo-btn" onclick="simulateFileSelect()">파일 선택 (데모)</button>
+        </div>
+      </div>
+
+      <!-- 파일 선택 후 -->
+      <div id="up-after" style="display:none">
+        <div class="up-file">
+          <span id="up-filename"></span>
+          <button class="up-remove" title="파일 제거" onclick="removeFile()">×</button>
+        </div>
+      </div>
+
+      <!-- 탈퇴 옵션 -->
+      <label class="up-option">
+        <input type="checkbox"/>
+        <span class="up-option-text">
+          <b>미포함 회원 탈퇴 처리</b>
+          <small>전체 명단 업로드 시에만 체크하세요.</small>
+        </span>
+      </label>
+
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeUpload()">취소</button>
+        <button class="btn-save" onclick="doUpload()">업로드</button>
+      </div>
+    </div>
+
+    <!-- 단계 2: 결과 -->
+    <div id="upload-step-result" style="display:none">
+      <div style="font-size:13px;font-weight:600;margin-bottom:.6rem">✅ 업로드 완료 · 2026-06-11 14:30</div>
+      <div class="result-grid">
+        <div class="result-cell"><div class="rc-num">150</div><div class="rc-lbl">신규</div></div>
+        <div class="result-cell"><div class="rc-num">22,970</div><div class="rc-lbl">갱신</div></div>
+        <div class="result-cell"><div class="rc-num">36</div><div class="rc-lbl">탈퇴 처리</div></div>
+        <div class="result-cell rc-fail"><div class="rc-num">2</div><div class="rc-lbl">실패</div></div>
+      </div>
+      <div style="font-size:11px;color:var(--coral);background:var(--coral-bg);border-radius:var(--r-md);padding:8px 12px">실패 2건 — 42행: 회원번호 없음 / 1201행: 아이디 없음</div>
+      <div class="modal-footer">
+        <button class="btn-save" onclick="closeUpload()">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// 등급별 상세 카드 노출 규칙 (page.md 기준)
+//  일반(group_sno=1)        : 기본 정보만
+//  사업자(group_sno 2,3,5,6): 기본 + 사업자 정보(추가 정보 포함)
+//  B2B(group_sno=9)         : 기본 + 사업자 + B2B 거래처 정보 (파트너 수정은 B2B 카드 내 버튼)
+function showDetail(group,name,id,gradeLabel,gradeCls,appOn,memNo){
+  // 헤더·기본정보 갱신
+  document.getElementById('d-header-id').textContent=id;
+  document.getElementById('d-name2').textContent=name;
+  document.getElementById('d-id').textContent=id;
+  document.getElementById('d-mem-no').textContent=memNo||'';
+  var g=document.getElementById('d-grade');g.className='badge '+gradeCls;g.textContent=gradeLabel;
+  // 조건부 카드 (group: 'gen' | 'biz' | 'b2b')
+  var showBiz=(group==='biz'||group==='b2b');
+  document.getElementById('d-basic-body').className='info-body cols2';
+  document.getElementById('d-card-biz').style.display=showBiz?'':'none';
+  document.getElementById('d-card-b2b').style.display='';
+  var bizGrid=document.getElementById('d-biz-grid');
+  bizGrid.style.display='grid';
+  bizGrid.style.gridTemplateColumns='1fr';
+  document.getElementById('d-biz-body').className='info-body split';
+  document.getElementById('detail-modal').classList.add('open');
+}
+function closeDetail(){document.getElementById('detail-modal').classList.remove('open');}
+function pickPartnerReg(isYes){document.getElementById('p-reg-y').className='type-opt'+(isYes?' on':'');document.getElementById('p-reg-n').className='type-opt'+(!isYes?' on':'');}
+function pickPartnerTax(isYes){document.getElementById('p-tax-y').className='type-opt'+(isYes?' on':'');document.getElementById('p-tax-n').className='type-opt'+(!isYes?' on':'');}
+function savePartner(btn){btn.textContent='저장됨';btn.disabled=true;setTimeout(function(){btn.textContent='저장';btn.disabled=false;},1500);}
+function openUpload(){resetUpload();document.getElementById('upload-modal').classList.add('open');}
+function closeUpload(){document.getElementById('upload-modal').classList.remove('open');}
+function doUpload(){document.getElementById('upload-step-file').style.display='none';document.getElementById('upload-step-result').style.display='block';}
+function resetUpload(){
+  document.getElementById('upload-step-file').style.display='block';
+  document.getElementById('upload-step-result').style.display='none';
+  document.getElementById('up-zone').style.display='block';
+  document.getElementById('up-after').style.display='none';
+}
+function simulateFileSelect(){
+  document.getElementById('up-filename').textContent='📄 sfood_member_template_20260611.xlsx';
+  document.getElementById('up-zone').style.display='none';
+  document.getElementById('up-after').style.display='block';
+}
+function removeFile(){
+  document.getElementById('up-after').style.display='none';
+  document.getElementById('up-zone').style.display='block';
+}
+// 필터 버튼: 그룹 내 단일 선택 → 즉시 조회 (조회 버튼 없음)
+function pickFilter(btn){
+  var g=btn.closest('.filter-group');
+  g.querySelectorAll('.fbtn').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');
+  /* 실제 구현 시: 여기서 즉시 목록 재조회 */
+}
+function todayStr(){var d=new Date();return d.toISOString().slice(0,10);}
+function initDateFilter(){
+  var t=todayStr();
+  document.getElementById('dt-from').value=t;
+  document.getElementById('dt-to').value=t;
+  var presets=document.querySelectorAll('.filter-group.presets .fbtn');
+  presets.forEach(function(b){b.classList.remove('active')});
+  if(presets.length)presets[0].classList.add('active');
+}
+// 빠른 기간 선택: 토글 + 날짜 입력 채우기
+function pickPreset(btn){
+  var g=btn.closest('.filter-group');
+  g.querySelectorAll('.fbtn').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');
+  var label=btn.textContent.trim();
+  var to=new Date(),from=new Date(to);
+  if(label==='일주일'){from.setDate(to.getDate()-7);}
+  else if(label==='1개월'){from.setMonth(to.getMonth()-1);}
+  else if(label==='이번달'){from=new Date(to.getFullYear(),to.getMonth(),1);}
+  else if(label==='지난달'){from=new Date(to.getFullYear(),to.getMonth()-1,1);to=new Date(to.getFullYear(),to.getMonth(),0);}
+  document.getElementById('dt-from').value=from.toISOString().slice(0,10);
+  document.getElementById('dt-to').value=to.toISOString().slice(0,10);
+}
+function doSearch(){/* 실제 구현 시: 필터 조건으로 목록 재조회 */}
+// 초기화
+function resetFilters(){
+  var grp=document.getElementById('group-sel');if(grp)grp.value='ALL';
+  var st=document.getElementById('search-type-sel');if(st)st.value='MEM_ID';
+  initDateFilter();
+  var kw=document.getElementById('kw');kw.value='';kw.placeholder='';
+  document.getElementById('kw-clear').style.display='none';
+}
+// 요약 카드 → 해당 필터 버튼 활성화 (즉시 조회 단축키)
+function setGroupBtn(name,label){
+  var g=document.querySelector('.filter-group[data-filter="'+name+'"]');
+  if(!g)return;
+  g.querySelectorAll('.fbtn').forEach(function(b){b.classList.toggle('active',b.textContent.trim()===label)});
+}
+function selectSummary(el,type){
+  document.querySelectorAll('.sum-card').forEach(function(c){c.classList.remove('active')});
+  el.classList.add('active');
+  setGroupBtn('group','전체');setGroupBtn('appfl','전체');
+  if(type==='gen')setGroupBtn('group','일반');
+  else if(type==='biz')setGroupBtn('group','사업자');
+  else if(type==='b2b')setGroupBtn('group','B2B');
+  else if(type==='wait')setGroupBtn('appfl','미승인');
+}
+function pickOne(btn){var sibs=btn.parentNode.querySelectorAll('.type-opt');sibs.forEach(function(b){b.classList.remove('on')});btn.classList.add('on');}
+function toggleClear(input){document.getElementById('kw-clear').style.display=input.value?'block':'none';}
+function clearSearch(){var kw=document.getElementById('kw');kw.value='';document.getElementById('kw-clear').style.display='none';kw.focus();}
+function saveMemo(){
+  var ta=document.getElementById('memo-ta');
+  var btn=document.getElementById('memo-btn');
+  var note=document.getElementById('memo-note');
+  if(!ta.value.trim()){ta.focus();return;}
+  ta.classList.add('saved');
+  btn.textContent='저장됨 ✓';
+  btn.disabled=true;
+  note.textContent='최종 수정: 2026-06-22 14:35 · 강소희';
+  setTimeout(function(){
+    ta.classList.remove('saved');
+    btn.textContent='저장';
+    btn.disabled=false;
+  },2000);
+}
+window.addEventListener('load',initDateFilter);
+function toggleAll(chk){
+  document.querySelectorAll('tbody .tbl-check').forEach(function(c){c.checked=chk.checked;});
+}
+function toggleRow(chk){
+  var all=document.querySelectorAll('tbody .tbl-check');
+  var checked=[].filter.call(all,function(c){return c.checked;});
+  var hdr=document.getElementById('chk-all');
+  hdr.indeterminate=(checked.length>0&&checked.length<all.length);
+  hdr.checked=(checked.length===all.length);
+}
+function downloadExcel(){alert('선택된 회원 엑셀 다운로드 (데모)');}
+function toggleDd(id){
+  var target=document.getElementById(id);
+  var wasOpen=target.classList.contains('open');
+  document.querySelectorAll('.page-size-dropdown').forEach(function(d){d.classList.remove('open')});
+  if(!wasOpen)target.classList.add('open');
+}
+function togglePageSize(){toggleDd('page-size-dropdown');}
+function pickPageSize(btn,n){
+  btn.closest('.page-size-dropdown').querySelectorAll('.page-size-opt').forEach(function(b){b.classList.remove('selected')});
+  btn.classList.add('selected');
+  document.getElementById('page-size-lbl').textContent=n+'개씩 보기';
+  document.getElementById('page-size-dropdown').classList.remove('open');
+}
+function pickGroup(btn,val,lbl){
+  btn.closest('.page-size-dropdown').querySelectorAll('.page-size-opt').forEach(function(b){b.classList.remove('selected')});
+  btn.classList.add('selected');
+  document.getElementById('group-lbl').textContent=lbl;
+  document.getElementById('group-dd').classList.remove('open');
+}
+function pickStype(btn,val,lbl){
+  btn.closest('.page-size-dropdown').querySelectorAll('.page-size-opt').forEach(function(b){b.classList.remove('selected')});
+  btn.classList.add('selected');
+  document.getElementById('stype-lbl').textContent=lbl;
+  document.getElementById('stype-dd').classList.remove('open');
+  var kw=document.getElementById('kw');
+  kw.placeholder=(val==='MEM_ID')?'':'정확히 일치하는 값 입력';
+  kw.value='';document.getElementById('kw-clear').style.display='none';
+}
+document.addEventListener('click',function(e){
+  if(!e.target.closest('.page-size-wrap'))document.querySelectorAll('.page-size-dropdown').forEach(function(d){d.classList.remove('open')});
+});
+</script>
+</body>
+</html>

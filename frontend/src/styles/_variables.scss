@@ -1,0 +1,156 @@
+:root {
+  // 배경 / 서피스
+  --bg: #f4f4f4;
+  --surface: #fff;
+  --surface2: #f8f8f8;
+  --surface3: #efefef;
+
+  // 테두리
+  --border: rgba(0, 0, 0, 0.08);
+  --border2: rgba(0, 0, 0, 0.14);
+
+  // 텍스트
+  --text: #1a1917;
+  --text2: #6b6960;
+  --text3: #9c9a8e;
+
+  // 브랜드 (S-Food 레드)
+  --teal: #c0000a;
+  --teal-bg: #fdecea;
+  --teal-mid: #e8000d;
+
+  // 긍정 (초록 — 판매중, 재개)
+  --pos: #0f6e56;
+  --pos-bg: #e1f5ee;
+  --pos-mid: #1d9e75;
+
+  // 경고 (주황 — 품절)
+  --coral: #993c1d;
+  --coral-bg: #faece7;
+  --coral-mid: #d85a30;
+
+  // 전용 구분 (보라)
+  --purple-bg: #eeedfe;
+  --purple: #534ab7;
+
+  // Border Radius
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+}
+
+:root[data-design-theme='admin'] {
+  --bg: #f5f7fa;
+  --surface: #fff;
+  --surface2: #f1f5f9;
+  --surface3: #e2e8f0;
+  --border: rgba(15, 23, 42, 0.1);
+  --border2: rgba(15, 23, 42, 0.18);
+  --text: #0f172a;
+  --text2: #475569;
+  --text3: #94a3b8;
+  --teal: #2563eb;
+  --teal-bg: #dbeafe;
+  --teal-mid: #1d4ed8;
+  --pos: #15803d;
+  --pos-bg: #dcfce7;
+  --pos-mid: #16a34a;
+  --coral: #b45309;
+  --coral-bg: #fef3c7;
+  --coral-mid: #d97706;
+  --purple-bg: #ede9fe;
+  --purple: #6d28d9;
+}
+
+:root[data-design-theme='landing'] {
+  --bg: #fff8f0;
+  --surface: #fff;
+  --surface2: #fff1e4;
+  --surface3: #fed7aa;
+  --border: rgba(124, 45, 18, 0.1);
+  --border2: rgba(124, 45, 18, 0.2);
+  --text: #2b1d14;
+  --text2: #73523d;
+  --text3: #a27a5d;
+  --teal: #dc2626;
+  --teal-bg: #fee2e2;
+  --teal-mid: #ef4444;
+  --pos: #047857;
+  --pos-bg: #d1fae5;
+  --pos-mid: #10b981;
+  --coral: #c2410c;
+  --coral-bg: #ffedd5;
+  --coral-mid: #f97316;
+  --purple-bg: #f3e8ff;
+  --purple: #9333ea;
+}
+
+:root[data-design-theme='ai-service'] {
+  --bg: #f7f7ff;
+  --surface: #fff;
+  --surface2: #eef2ff;
+  --surface3: #e0e7ff;
+  --border: rgba(49, 46, 129, 0.1);
+  --border2: rgba(49, 46, 129, 0.2);
+  --text: #171329;
+  --text2: #4c456d;
+  --text3: #8b83a8;
+  --teal: #7c3aed;
+  --teal-bg: #ede9fe;
+  --teal-mid: #8b5cf6;
+  --pos: #0f766e;
+  --pos-bg: #ccfbf1;
+  --pos-mid: #14b8a6;
+  --coral: #be123c;
+  --coral-bg: #ffe4e6;
+  --coral-mid: #f43f5e;
+  --purple-bg: #dbeafe;
+  --purple: #2563eb;
+}
+
+:root[data-design-theme='fintech'] {
+  --bg: #f3f8f6;
+  --surface: #fff;
+  --surface2: #eaf4f0;
+  --surface3: #d8ebe4;
+  --border: rgba(20, 83, 45, 0.1);
+  --border2: rgba(20, 83, 45, 0.2);
+  --text: #12231b;
+  --text2: #466157;
+  --text3: #7f9b90;
+  --teal: #047857;
+  --teal-bg: #d1fae5;
+  --teal-mid: #059669;
+  --pos: #166534;
+  --pos-bg: #dcfce7;
+  --pos-mid: #22c55e;
+  --coral: #9a3412;
+  --coral-bg: #ffedd5;
+  --coral-mid: #ea580c;
+  --purple-bg: #e0e7ff;
+  --purple: #3730a3;
+}
+
+:root[data-design-theme='devtools'] {
+  --bg: #111827;
+  --surface: #1f2937;
+  --surface2: #273449;
+  --surface3: #374151;
+  --border: rgba(255, 255, 255, 0.09);
+  --border2: rgba(255, 255, 255, 0.16);
+  --text: #f9fafb;
+  --text2: #d1d5db;
+  --text3: #9ca3af;
+  --teal: #38bdf8;
+  --teal-bg: rgba(56, 189, 248, 0.16);
+  --teal-mid: #7dd3fc;
+  --pos: #34d399;
+  --pos-bg: rgba(52, 211, 153, 0.16);
+  --pos-mid: #6ee7b7;
+  --coral: #fb7185;
+  --coral-bg: rgba(251, 113, 133, 0.16);
+  --coral-mid: #fda4af;
+  --purple-bg: rgba(167, 139, 250, 0.18);
+  --purple: #c4b5fd;
+}

@@ -1,0 +1,66 @@
+spring:
+  application:
+    name: sfood-mall-automation-backend
+  profiles:
+    default: local
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  session:
+    timeout: 86400s
+  threads:
+    virtual:
+      enabled: true
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:sfood.dhlee@gmail.com}
+    password: 
+    properties:
+      mail:
+        smtp:
+          auth: ${MAIL_SMTP_AUTH:true}
+          timeout: ${MAIL_SMTP_TIMEOUT:5000}
+          starttls:
+            enable: ${MAIL_SMTP_STARTTLS_ENABLE:true}
+
+logging:
+  file:
+    name: logs/sfood-mall-automation.log
+
+app:
+  database:
+    path: ${DB_PATH:./data/sfood-mall-automation.db}
+  godo:
+    base-url: ${GODO_BASE_URL:https://openhub.godo.co.kr}
+    partner-key:
+    key: 
+  wms:
+    login-url: ${WMS_LOGIN_URL:https://wms.s-food.com/sessionService/login}
+    stock-url: ${WMS_STOCK_URL:https://wms.s-food.com/invnTotListService/searchAllStock}
+    user-id: ${WMS_USER_ID:batch.ai}
+    password:
+    center-code: ${WMS_CENTER_CODE:OA110}
+    warehouse-code: ${WMS_WAREHOUSE_CODE:SLP001}
+  slack:
+    webhook-url: 
+  otp:
+    server-secret: ${OTP_SERVER_SECRET:SFOOD-GODOMALL}
+  sfood-admin:
+    base-url: ${SFOOD_ADMIN_BASE_URL:https://gdadmin.sfoodmall.co.kr}
+    manager-id: ${SFOOD_ADMIN_MANAGER_ID:sfoodb2b_3}
+    manager-pw: 
+    login-path: ${SFOOD_ADMIN_LOGIN_PATH:/base/login_ps.php}
+    goods-form-path: ${SFOOD_ADMIN_GOODS_FORM_PATH:/goods/goods_register.php}
+    goods-save-path: ${SFOOD_ADMIN_GOODS_SAVE_PATH:/goods/goods_ps.php}
+    test-goods-code: ${SFOOD_ADMIN_TEST_GOODS_CODE:1000001371}
+    member-list-path: ${SFOOD_ADMIN_MEMBER_LIST_PATH:/member/member_list.php}
+    member-detail-path: ${SFOOD_ADMIN_MEMBER_DETAIL_PATH:/member/member_modify.php}
+  encryption:
+    key: 
+  ax-auth:
+    base-url: ${AX_AUTH_BASE_URL:https://ax-auth.s-food.ai}
+    client-id: ${AX_AUTH_CLIENT_ID:sfood-mall-automation}
+    client-secret: ${AX_AUTH_CLIENT_SECRET:https://sfm-ssa.s-food.ai}
+    redirect-uri: ${AX_AUTH_REDIRECT_URI:http://localhost:5173/auth/callback}

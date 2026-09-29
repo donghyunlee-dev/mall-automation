@@ -1,0 +1,27 @@
+@use '../../styles/variables';
+
+.wrap {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.card {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 1rem 0.9rem;
+  text-align: left;
+}
+
+.label {
+  font-size: 0.78rem;
+  color: var(--text2);
+  margin-bottom: 0.4rem;
+}
+
+.value {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+}

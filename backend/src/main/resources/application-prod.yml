@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://sfood-mall-automation-db.cluster-cggz4gt2erxl.ap-northeast-2.rds.amazonaws.com:5432/sfood_mall_automation
+    username: postgres
+    password: h2&;*rKdg^W%,!5
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 1
+      connection-timeout: 10000
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  sql:
+    init:
+      mode: never

@@ -1,0 +1,22 @@
+# 도구/세션 상태
+.omc/
+.playwright-mcp/
+
+# 에디터 설정
+.vscode/
+
+# 크래시 덤프 · 로그
+*.stackdump
+hs_err_pid*.log
+replay_pid*.log
+*.log
+
+# 컴파일 산출물
+/backend/bin/
+
+# 개발용 스크린샷 (저장소 루트)
+/*.png
+
+# 생성물 · 개인 메모 (로컬 유지, 추적 안 함)
+/frontend/sample-members.xlsx
+/frontend/docs/reports/handoff-2026-06-22.md

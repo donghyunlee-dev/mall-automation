@@ -1,0 +1,174 @@
+@use '../../styles/variables';
+
+.header {
+  background: var(--surface);
+  border-bottom: 0.5px solid var(--border);
+  padding: 0 1.25rem;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+
+  em {
+    color: var(--teal-mid);
+    font-style: normal;
+  }
+}
+
+.hdrTabs {
+  flex: 0 0 auto;
+  margin-left: 16px;
+  display: flex;
+  gap: 2px;
+  height: 100%;
+  align-items: stretch;
+}
+
+.tabNav {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  font-size: 14px;
+  color: var(--text2);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  font-weight: 500;
+
+  &:hover {
+    color: var(--text);
+  }
+}
+
+.active {
+  color: var(--text);
+  border-bottom-color: var(--teal);
+  font-weight: 600;
+}
+
+.hdrRight {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex-shrink: 0;
+}
+
+// 로그아웃 확인 모달
+.modalBg {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.32);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.confirmModal {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 1.25rem;
+  width: 100%;
+  max-width: 340px;
+
+  h3 {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.btnCancel {
+  height: 34px;
+  padding: 0 14px;
+  background: none;
+  border: 0.5px solid var(--border2);
+  border-radius: var(--r-md);
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--text);
+  font-family: inherit;
+
+  &:hover {
+    background: var(--surface2);
+  }
+}
+
+.btnLogout {
+  height: 34px;
+  padding: 0 14px;
+  background: var(--teal);
+  border: none;
+  border-radius: var(--r-md);
+  font-size: 13px;
+  cursor: pointer;
+  color: #fff;
+  font-family: inherit;
+
+  &:hover:not(:disabled) {
+    opacity: 0.88;
+  }
+
+  &:disabled {
+    opacity: 0.65;
+    cursor: default;
+  }
+}
+
+.logoutEmail {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.errBox {
+  background: var(--coral-bg);
+  border: 0.5px solid color-mix(in srgb, var(--coral) 20%, transparent);
+  border-radius: var(--r-md);
+  padding: 10px 12px;
+  font-size: 12px;
+  color: var(--coral);
+  margin-bottom: 0.85rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+  .header {
+    gap: 6px;
+  }
+
+  .hdrRight {
+    gap: 6px;
+  }
+
+  .tabNav {
+    flex: 1;
+    text-align: center;
+    padding: 12px 8px;
+  }
+}

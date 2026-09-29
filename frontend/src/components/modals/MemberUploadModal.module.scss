@@ -1,0 +1,193 @@
+@use '../../styles/variables';
+
+
+.dropZone {
+  border: 1.5px dashed var(--border2);
+  border-radius: var(--r-lg);
+  padding: 1.5rem 1.25rem;
+  text-align: center;
+  background: var(--surface2);
+  cursor: pointer;
+  margin-bottom: 0.75rem;
+  transition: border-color 0.15s, background 0.15s;
+
+  &:hover {
+    border-color: rgba(0, 0, 0, 0.24);
+    background: var(--surface3);
+  }
+}
+
+.dragging {
+  border-color: var(--teal-mid);
+  background: var(--teal-bg);
+}
+
+.dropIcon {
+  font-size: 28px;
+  margin-bottom: 6px;
+}
+
+.dropText {
+  font-size: 13px;
+  color: var(--text2);
+  margin-bottom: 4px;
+}
+
+.dropHint {
+  font-size: 11px;
+  color: var(--text3);
+}
+
+.fileRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: var(--surface2);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 9px 12px;
+  margin-bottom: 0.6rem;
+  font-size: 12px;
+}
+
+.removeBtn {
+  border: none;
+  background: none;
+  color: var(--text3);
+  font-size: 17px;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  flex-shrink: 0;
+
+  &:hover {
+    color: var(--text2);
+  }
+}
+
+.detectBox {
+  background: var(--teal-bg);
+  border: 0.5px solid color-mix(in srgb, var(--teal-mid) 22%, transparent);
+  border-radius: var(--r-md);
+  padding: 10px 12px;
+  font-size: 12px;
+  color: var(--teal);
+  margin-bottom: 0.75rem;
+}
+
+.optionRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  background: var(--coral-bg);
+  border: 0.5px solid color-mix(in srgb, var(--coral) 20%, transparent);
+  border-radius: var(--r-md);
+  padding: 11px 13px;
+  cursor: pointer;
+  margin-bottom: 0.6rem;
+
+  input {
+    margin-top: 3px;
+    flex-shrink: 0;
+    accent-color: var(--teal-mid);
+  }
+}
+
+.optionText {
+  font-size: 12px;
+  color: var(--text);
+  line-height: 1.5;
+
+  b {
+    display: block;
+  }
+
+  small {
+    display: block;
+    color: var(--text2);
+    font-size: 11px;
+    margin-top: 2px;
+  }
+}
+
+// 업로드 중
+.busyBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  font-size: 13px;
+  color: var(--text2);
+  gap: 10px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.busySpinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border2);
+  border-top-color: var(--teal-mid);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+// 완료 결과
+.doneTitle {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+}
+
+.resultGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 0.5rem 0;
+}
+
+.resultCell {
+  background: var(--surface2);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 10px 12px;
+}
+
+.rcNum {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.rcLbl {
+  font-size: 11px;
+  color: var(--text3);
+}
+
+.rcFail .rcNum {
+  color: var(--coral-mid);
+}
+
+.warnBox {
+  background: var(--coral-bg);
+  border: 0.5px solid color-mix(in srgb, var(--coral) 20%, transparent);
+  border-radius: var(--r-md);
+  padding: 9px 12px;
+  font-size: 12px;
+  color: var(--coral);
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.failBox {
+  background: var(--coral-bg);
+  border-radius: var(--r-md);
+  padding: 8px 12px;
+  font-size: 11px;
+  color: var(--coral);
+  margin-bottom: 0.5rem;
+}

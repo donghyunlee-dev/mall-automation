@@ -1,0 +1,32 @@
+@use '../../styles/variables';
+
+.toast {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.25rem;
+  background: #1a1917;
+  color: #f4f3ef;
+  font-size: 13px;
+  padding: 10px 16px;
+  border-radius: var(--r-lg);
+  z-index: 400;
+  max-width: 320px;
+  line-height: 1.5;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  animation: slideIn 0.18s ease;
+}
+
+.error {
+  background: var(--coral-mid);
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

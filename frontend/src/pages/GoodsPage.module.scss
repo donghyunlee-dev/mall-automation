@@ -1,0 +1,95 @@
+@use '../styles/variables';
+
+.page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  min-height: 0;
+}
+
+.main {
+  flex: 1;
+  width: 100%;
+  padding: 1rem 1.5rem 2rem;
+}
+
+.section {
+  margin-bottom: 0.75rem;
+}
+
+.ucard {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  width: 100%;
+}
+
+.ucardOverflowVisible {
+  overflow: visible;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 14px;
+  border-bottom: 0.5px solid var(--border);
+}
+
+.cardTitle {
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.placeholder {
+  padding: 2rem 1.5rem;
+  font-size: 13px;
+  color: var(--text3);
+  text-align: center;
+}
+
+.pill {
+  font-size: 11px;
+  border-radius: 10px;
+  padding: 2px 7px;
+  font-weight: 500;
+  white-space: nowrap;
+  background: var(--surface2);
+  color: var(--text2);
+  border: 0.5px solid var(--border);
+}
+
+.hdRight {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.btnSmall {
+  height: 30px;
+  padding: 0 10px;
+  background: var(--teal);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-md);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+
+  &:hover {
+    opacity: 0.88;
+  }
+}
+
+@media (max-width: 640px) {
+  .main {
+    padding: 1rem 0.75rem 3rem;
+  }
+}

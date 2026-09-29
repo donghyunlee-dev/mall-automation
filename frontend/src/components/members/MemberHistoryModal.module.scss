@@ -1,0 +1,202 @@
+@use '../../styles/variables';
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+  flex-shrink: 0;
+
+  h3 {
+    margin-bottom: 0;
+  }
+}
+
+.close {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: none;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--text3);
+  cursor: pointer;
+  border-radius: var(--r-md);
+
+  &:hover {
+    background: var(--surface2);
+    color: var(--text);
+  }
+}
+
+.stateMsg {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text3);
+  font-size: 13px;
+}
+
+.historyModal {
+  max-width: 1080px;
+  width: 94vw;
+  /* 이력 건수와 무관하게 고정 높이 유지 — 내용은 tableWrap에서 스크롤 */
+  height: 36vh;
+  max-height: 36vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+// 사업자 정보 이력(넓은 모달) — 열: 변경일시 / 상호 / 사업자번호 / 대표자명 / 사업장주소 / 업태 / 업종
+.historyModal:not(.historyModalNarrow) {
+  .table {
+    // 짧고 길이가 일정한 열: 콘텐츠 폭으로 고정
+    th:nth-child(1), td:nth-child(1),   // 변경일시
+    th:nth-child(3), td:nth-child(3),   // 사업자번호
+    th:nth-child(4), td:nth-child(4),   // 대표자명
+    th:nth-child(6), td:nth-child(6),   // 업태
+    th:nth-child(7), td:nth-child(7) {  // 업종
+      white-space: nowrap;
+      width: 1%;
+    }
+
+    // 변경일시: 오른쪽 여백으로 다음 컬럼과 거리 확보
+    th:nth-child(1), td:nth-child(1) {
+      padding-right: 1.5rem;
+    }
+
+    // 상호: 다소 길어질 수 있어 여유 폭
+    th:nth-child(2), td:nth-child(2) {
+      min-width: 140px;
+    }
+
+    // 사업장 주소: 가장 길어질 수 있어 가장 넓은 여유 폭
+    th:nth-child(5), td:nth-child(5) {
+      min-width: 260px;
+    }
+  }
+}
+
+.historyModalNarrow {
+  width: fit-content;
+  max-width: 94vw;
+  height: 36vh;
+  max-height: 36vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  .tableWrap {
+    // 내용이 고정 폭을 넘으면 가로 스크롤
+    overflow-x: auto;
+  }
+
+  // 거래처 정보 이력 — 열: 변경일시 / 거래처 코드 / 거래처 명 / 거래처 상태
+  .table {
+    // 전역 `table { min-width: 760px }`(요소 선택자라 전역 누수) 무력화 —
+    // 기본은 모달 폭(min-width:100%)을 채우고, 내용이 더 길면 그만큼 커져 가로 스크롤이 생김
+    width: auto;
+    min-width: 100%;
+
+    // 셀 가로 여백을 좁혀 모달 가로 폭 축소
+    th, td {
+      padding: 0.6rem 0.4rem;
+    }
+
+    // 변경일시·거래처 코드·거래처 상태: 콘텐츠 폭으로 고정
+    th:nth-child(1), td:nth-child(1),
+    th:nth-child(2), td:nth-child(2),
+    th:nth-child(4), td:nth-child(4) {
+      white-space: nowrap;
+      width: 1%;
+    }
+
+    // 변경일시: 오른쪽 여백으로 다음 컬럼과 거리 확보
+    th:nth-child(1), td:nth-child(1) {
+      padding-right: 1.5rem;
+    }
+
+    // 거래처 코드: 가운데 정렬
+    th:nth-child(2), td:nth-child(2) {
+      text-align: center;
+    }
+
+    // 거래처 상태: 가운데 정렬
+    th:nth-child(4), td:nth-child(4) {
+      text-align: center;
+    }
+
+    // 거래처 명: 내용 폭으로 두어 '거래처 상태' 열이 바로 옆에 붙도록
+    th:nth-child(3), td:nth-child(3) {
+      white-space: nowrap;
+    }
+  }
+}
+
+.tableWrap {
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow-x: auto;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 0.6rem 0.7rem;
+    border-bottom: 0.5px solid var(--border);
+    font-size: 13px;
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  thead th {
+    background: var(--surface2);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text2);
+    white-space: nowrap;
+  }
+
+}
+
+.dt {
+  color: var(--text2);
+  white-space: nowrap;
+}
+
+.before {
+  color: var(--text3);
+  text-decoration: line-through;
+}
+
+.after {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.empty {
+  color: var(--text3);
+}
+
+.changedCell {
+  background: var(--neg-bg);
+  color: var(--neg);
+  font-weight: 600;
+}
+
+// .historyModal(width:94vw)이 .historyModalNarrow(width:fit-content)를 덮어쓰는 문제 해결.
+// 2-class specificity로 사업자 이력 모달과 거래처 이력 모달의 너비를 명확히 분리한다.
+.historyModal.historyModalNarrow {
+  width: 560px;
+  max-width: 94vw;
+}

@@ -1,0 +1,13 @@
+- Executed:
+  - `./gradlew test --tests com.sfood.automation.wms.infrastructure.scraping.StockDataRefinerTest --tests com.sfood.automation.wms.infrastructure.scraping.WmsStockAggregatorTest --tests com.sfood.automation.goods.application.usecase.UpdateCommonStatusConfigUseCaseTest --tests com.sfood.automation.goods.application.usecase.RegisterGoodsUseCaseTest --tests com.sfood.automation.goods.application.usecase.SyncGodoStatusUseCaseTest --tests com.sfood.automation.batch.infrastructure.job.ProductSyncBatchJobTest`
+  - `./gradlew test --tests com.sfood.automation.goods.infrastructure.persistence.GoodsRepositoryImplTest --tests com.sfood.automation.goods.application.usecase.ForceSyncGodoStatusUseCaseTest --tests com.sfood.automation.common.bootstrap.Task09OperationalReadinessTest`
+  - `./gradlew test`
+  - `./gradlew test --tests com.sfood.automation.wms.infrastructure.scraping.StockDataRefinerTest --tests com.sfood.automation.goods.application.usecase.SyncGodoStatusUseCaseTest`
+  - `./gradlew testClasses`
+  - `./gradlew test --tests com.sfood.automation.goods.application.usecase.UpdateCommonStatusConfigUseCaseTest --tests com.sfood.automation.goods.application.usecase.RegisterGoodsUseCaseTest --tests com.sfood.automation.goods.application.usecase.UpdateGoodsUseCaseTest --tests com.sfood.automation.goods.domain.model.GoodsTest --tests com.sfood.automation.goods.presentation.CommonStatusConfigControllerTest --tests com.sfood.automation.goods.presentation.GoodsControllerTest`
+- Result:
+  - all commands passed
+  - added regression coverage for freeze remain-valid-days filtering
+  - added regression coverage for logging both `validPercent` and `remainValidDays` as max evidence values
+  - verified local SQLite compatibility handling for legacy `goods_status_log.valid_percent NOT NULL` schemas
+  - verified removal of hardcoded `150` fallbacks in DTO/domain compatibility paths

@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:sqlite:${app.database.path}?busy_timeout=30000
+    driver-class-name: org.sqlite.JDBC
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.community.dialect.SQLiteDialect
+  sql:
+    init:
+      mode: always
+
+app:
+  sfood-admin:
+    manager-id: sfoodb2b_3
+    manager-pw: sfood123!!

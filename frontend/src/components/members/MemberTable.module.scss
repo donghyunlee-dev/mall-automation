@@ -1,0 +1,265 @@
+@use '../../styles/variables';
+
+.wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.tableWrap {
+  position: relative;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  flex: 1;
+  min-height: 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  min-width: 760px;
+}
+
+th {
+  text-align: left;
+  padding: 7px 11px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text2);
+  background: var(--surface3);
+  border-bottom: 1px solid var(--border);
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+td {
+  padding: 8px 11px;
+  border-bottom: 0.5px solid var(--border);
+  vertical-align: middle;
+  white-space: nowrap;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.sortable {
+  cursor: pointer;
+  user-select: none;
+
+  &:hover {
+    background: var(--surface2);
+    color: var(--text);
+  }
+}
+
+.checkCell {
+  text-align: center;
+  padding: 8px 6px;
+  white-space: nowrap;
+}
+
+/* 가운데 정렬 컬럼: 회원번호·아이디·등급·거래처코드·거래처등록·가입일·상세/삭제 */
+.tableWrap th:nth-child(2),
+.tableWrap td:nth-child(2),
+.tableWrap th:nth-child(3),
+.tableWrap td:nth-child(3),
+.tableWrap th:nth-child(5),
+.tableWrap td:nth-child(5),
+.tableWrap th:nth-child(8),
+.tableWrap td:nth-child(8),
+.tableWrap th:nth-child(10),
+.tableWrap td:nth-child(10),
+.tableWrap th:nth-child(11),
+.tableWrap td:nth-child(11),
+.tableWrap th:nth-child(12),
+.tableWrap td:nth-child(12) {
+  text-align: center;
+}
+
+/* 체크박스와 회원번호 사이 약간의 여백 */
+.tableWrap th:nth-child(2),
+.tableWrap td:nth-child(2) {
+  padding-left: 18px;
+}
+
+.checkbox {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  accent-color: var(--teal-mid);
+  vertical-align: middle;
+}
+
+.sortIcon {
+  display: inline-block;
+  margin-left: 4px;
+  opacity: 0.45;
+  font-style: normal;
+  font-size: 10px;
+}
+
+tbody tr:hover td {
+  background: var(--surface2);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--r-md);
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  line-height: 1.6;
+}
+
+.regOn {
+  background: var(--pos-bg);
+  color: var(--pos);
+}
+
+.regOff {
+  background: var(--teal-bg);
+  color: var(--teal);
+}
+
+.statusActive {
+  background: var(--pos-bg);
+  color: var(--pos);
+}
+
+.statusUnregistered {
+  background: var(--purple-bg);
+  color: var(--purple);
+}
+
+.statusInactive {
+  background: var(--coral-bg);
+  color: var(--coral);
+}
+
+/* 중복 가능성 행 — 노란 배경 강조 (duplicateMemNo 존재) */
+.dupRow td {
+  background: #feffc0;
+}
+
+
+.dupRow:hover td {
+  background: #faff8a;
+}
+
+.stateCell {
+  text-align: center;
+  vertical-align: middle;
+  padding: 32px 0;
+  font-size: 13px;
+  color: var(--text3);
+  border-bottom: none;
+}
+
+.emptyOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: var(--text3);
+  pointer-events: none;
+}
+
+.emptyMsg {
+  margin-bottom: 0.4rem;
+  pointer-events: auto;
+}
+
+.emptyHint {
+  font-size: 13px;
+  color: var(--text3);
+  pointer-events: auto;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border2);
+  border-top-color: var(--teal-mid);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.cellCenter {
+  text-align: center;
+}
+
+.actsCell {
+  overflow: visible !important;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.rowActs {
+  display: flex;
+  gap: 3px;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.12s;
+
+  @media (hover: none) and (pointer: coarse) {
+    opacity: 1;
+  }
+}
+
+tbody tr:hover .rowActs {
+  opacity: 1;
+}
+
+.rowBtn {
+  height: 24px;
+  padding: 0 6px;
+  border-radius: var(--r-sm);
+  font-size: 10px;
+  cursor: pointer;
+  font-family: inherit;
+  border: 0.5px solid var(--border2);
+  background: var(--surface);
+  color: var(--text3);
+  transition: background 0.1s, color 0.1s;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  &:hover {
+    background: var(--surface2);
+    color: var(--text);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: default;
+    background: var(--surface);
+    color: var(--text3);
+  }
+}
+
+.del:hover {
+  background: var(--coral-bg);
+  color: var(--coral);
+  border-color: color-mix(in srgb, var(--coral) 30%, transparent);
+}
+
+.dupResolve:hover {
+  background: #fef9c3;
+  color: #854d0e;
+  border-color: #fde68a;
+}

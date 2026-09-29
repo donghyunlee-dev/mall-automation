@@ -1,0 +1,104 @@
+@use '../styles/variables';
+
+.page {
+  padding: 1.5rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.dateInput,
+.selectInput {
+  height: 36px;
+  padding: 0 0.7rem;
+  border: 1px solid var(--border2);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.9rem;
+  font-family: inherit;
+}
+
+.searchBtn {
+  height: 36px;
+  padding: 0 1rem;
+  background: var(--surface);
+  color: var(--text2);
+  border: 1px solid var(--border2);
+  border-radius: var(--r-md);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+
+  &:hover:not(:disabled) {
+    background: var(--surface2);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.tabs {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 1.2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.tab {
+  padding: 0.6rem 1rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: var(--text2);
+  border-bottom: 2px solid transparent;
+}
+
+.tabActive {
+  color: var(--teal);
+  border-bottom-color: var(--teal);
+  font-weight: 700;
+}
+
+.memo {
+  margin: 0 0 1rem;
+  font-size: 0.85rem;
+  color: var(--text2);
+}
+
+.section {
+  margin-bottom: 1.5rem;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+}
+
+.grid2Even {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}

@@ -1,0 +1,440 @@
+@use '../styles/variables';
+
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+// 헤더
+.header {
+  background: var(--surface);
+  border-bottom: 0.5px solid var(--border);
+  padding: 0 1.25rem;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.logo {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+
+  em {
+    color: var(--teal-mid);
+    font-style: normal;
+  }
+}
+
+// 메인 영역
+.main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+// 로그인 카드
+.card {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 2rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+// 카드 상단
+.cardTop {
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+.cardIcon {
+  width: 44px;
+  height: 44px;
+  background: var(--teal-bg);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.9rem;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    color: var(--teal-mid);
+  }
+}
+
+.cardTitle {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.cardDesc {
+  font-size: 12px;
+  color: var(--text3);
+  line-height: 1.7;
+}
+
+// MS 로그인 버튼 (기본 로그인 방식 — 눈에 띄게)
+.msLoginBtn {
+  width: 100%;
+  height: 46px;
+  background: #2f2f2f;
+  color: #fff;
+  border: none;
+  border-radius: var(--r-md);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: opacity 0.15s, transform 0.1s;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// 구분선
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 1.1rem 0;
+  color: var(--text3);
+  font-size: 11px;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border2);
+  }
+
+  span {
+    padding: 0 10px;
+    white-space: nowrap;
+  }
+}
+
+// 스텝 인디케이터
+.steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.75rem;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stepNum {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--border2);
+  background: var(--surface2);
+  color: var(--text3);
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.stepLbl {
+  font-size: 11px;
+  color: var(--text3);
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+
+.stepActive .stepNum {
+  background: var(--teal-mid);
+  border-color: var(--teal-mid);
+  color: #fff;
+}
+
+.stepActive .stepLbl {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.stepDone .stepNum {
+  background: var(--pos-mid);
+  border-color: var(--pos-mid);
+  color: #fff;
+}
+
+.stepDone .stepLbl {
+  color: var(--text2);
+}
+
+.stepLine {
+  width: 32px;
+  height: 1px;
+  background: var(--border2);
+  margin: 0 6px;
+  flex-shrink: 0;
+}
+
+// 입력 폼
+.formRow {
+  margin-bottom: 0.8rem;
+
+  label {
+    display: block;
+    font-size: 11px;
+    color: var(--text2);
+    margin-bottom: 4px;
+    font-weight: 500;
+    letter-spacing: 0.1px;
+  }
+
+  input {
+    width: 100%;
+    height: 40px;
+    padding: 0 12px;
+    border: 0.5px solid var(--border2);
+    border-radius: var(--r-md);
+    font-size: 13px;
+    background: var(--surface2);
+    color: var(--text);
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.15s, background 0.15s;
+
+    &:focus {
+      border-color: var(--teal-mid);
+      background: var(--surface);
+    }
+
+    &::placeholder {
+      color: var(--text3);
+    }
+
+    &:disabled {
+      opacity: 0.38;
+      cursor: default;
+      background: var(--surface3);
+    }
+  }
+}
+
+.formHint {
+  font-size: 11px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+// OTP 전용 큰 입력
+.otpInput {
+  font-size: 24px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.25em !important;
+  text-align: center !important;
+  height: 56px !important;
+  border-radius: var(--r-lg) !important;
+
+  &:focus {
+    border-color: var(--teal-mid) !important;
+  }
+}
+
+// 타이머 + 재발송
+.timerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0.4rem 0 0.85rem;
+}
+
+.timerLabel {
+  font-size: 12px;
+  color: var(--text2);
+}
+
+.timerVal {
+  font-weight: 600;
+  color: var(--teal-mid);
+  font-variant-numeric: tabular-nums;
+}
+
+.timerWarn {
+  color: var(--coral-mid);
+}
+
+.resendBtn {
+  font-size: 11px;
+  color: var(--teal-mid);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  padding: 0;
+  transition: opacity 0.15s;
+
+  &:hover:not(:disabled) {
+    opacity: 0.7;
+  }
+
+  &:disabled {
+    color: var(--text3);
+    text-decoration: none;
+    cursor: default;
+  }
+}
+
+// 에러 박스
+.errBox {
+  background: var(--coral-bg);
+  border: 0.5px solid color-mix(in srgb, var(--coral) 20%, transparent);
+  border-radius: var(--r-md);
+  padding: 10px 12px;
+  font-size: 12px;
+  color: var(--coral);
+  margin-bottom: 0.85rem;
+  line-height: 1.5;
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+}
+
+// 성공 알림 박스
+.okBox {
+  background: var(--pos-bg);
+  border: 0.5px solid color-mix(in srgb, var(--pos) 20%, transparent);
+  border-radius: var(--r-md);
+  padding: 10px 12px;
+  font-size: 12px;
+  color: var(--pos);
+  margin-bottom: 0.85rem;
+  line-height: 1.5;
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+}
+
+// 기본 버튼
+.primaryBtn {
+  width: 100%;
+  height: 42px;
+  background: var(--teal);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-md);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: opacity 0.15s, transform 0.1s;
+  margin-top: 0.2rem;
+
+  &:hover:not(:disabled) {
+    opacity: 0.88;
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+
+  &.loading {
+    opacity: 0.65;
+    cursor: default;
+  }
+}
+
+// 스피너 애니메이션
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin {
+  animation: spin 0.7s linear infinite;
+}
+
+// 이전으로
+.backRow {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.backBtn {
+  font-size: 11px;
+  color: var(--text3);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 4px 0;
+  transition: color 0.12s;
+
+  &:hover {
+    color: var(--text2);
+  }
+}
+
+// 카드 하단
+.cardFooter {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 0.5px solid var(--border);
+  text-align: center;
+  font-size: 11px;
+  color: var(--text3);
+  line-height: 1.8;
+}
+
+// 반응형
+@media (max-width: 480px) {
+  .card {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .stepLbl {
+    display: none;
+  }
+
+  .stepLine {
+    width: 20px;
+  }
+}

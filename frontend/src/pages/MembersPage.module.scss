@@ -1,0 +1,199 @@
+@use '../styles/variables';
+
+.page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  min-height: 0;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 1rem 1.5rem 2rem;
+  min-height: 0;
+}
+
+.section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.ucard {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  width: 100%;
+  min-height: 0;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 14px;
+  border-bottom: 0.5px solid var(--border);
+  flex-wrap: wrap;
+  row-gap: 6px;
+}
+
+.cardTitle {
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.cardMeta {
+  font-size: 11px;
+  color: var(--text3);
+  white-space: nowrap;
+  align-self: flex-end;
+}
+
+.hdRight {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.pill {
+  font-size: 11px;
+  border-radius: 10px;
+  padding: 2px 7px;
+  font-weight: 500;
+  white-space: nowrap;
+  background: var(--surface2);
+  color: var(--text2);
+  border: 0.5px solid var(--border);
+}
+
+/* 중복 강조(노란 행) 안내 아이콘 — hover 시 말풍선 툴팁 표시 */
+.dupInfo {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #feffc0;
+  border: 1px solid #e3df8f;
+  color: #854d0e;
+  font-size: 13px;
+  font-weight: 700;
+  font-style: italic;
+  line-height: 1;
+  cursor: help;
+  user-select: none;
+
+  &:hover .dupTooltip {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* 말풍선 툴팁 — 흰 바탕·검정 글씨, 위쪽 꼬리 */
+.dupTooltip {
+  position: absolute;
+  top: calc(100% + 9px);
+  /* 꼬리는 아이콘 위에 두고 내용은 오른쪽으로 펼침 (왼쪽 카드 경계에 잘리지 않도록) */
+  left: -8px;
+  background: #fff;
+  color: #111;
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  font-style: normal;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+  z-index: 60;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.12s;
+  pointer-events: none;
+
+  /* 말풍선 꼬리 — 아이콘 중앙(왼쪽에서 18px 지점)을 가리킴 */
+  &::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 14px;
+    width: 8px;
+    height: 8px;
+    background: #fff;
+    border-left: 1px solid var(--border2);
+    border-top: 1px solid var(--border2);
+    transform: rotate(45deg);
+  }
+}
+
+.btnPrimary {
+  height: 30px;
+  padding: 0 12px;
+  background: var(--teal);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-md);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+
+  &:hover:not(:disabled) {
+    opacity: 0.88;
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+}
+
+.btnOutline {
+  height: 30px;
+  padding: 0 12px;
+  background: none;
+  color: var(--text);
+  border: 0.5px solid var(--border2);
+  border-radius: var(--r-md);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+
+  &:hover:not(:disabled) {
+    background: var(--surface2);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+}
+
+/* 거래처 일괄 등록 확인 모달 — 제목 제외 내용 가운데 정렬 */
+.bulkCenter {
+  text-align: center;
+}
+
+
+@media (max-width: 640px) {
+  .main {
+    padding: 1rem 0.75rem 3rem;
+  }
+}

@@ -1,0 +1,44 @@
+.btnSmallMuted {
+  height: 30px;
+  padding: 0 10px;
+  background: var(--surface2);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-md);
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--text2);
+  font-family: inherit;
+  white-space: nowrap;
+
+  &:hover {
+    background: var(--surface3);
+    color: var(--text);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+}
+
+.btnSmallOutline {
+  height: 30px;
+  padding: 0 10px;
+  background: none;
+  border: 0.5px solid var(--border2);
+  border-radius: var(--r-md);
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--text);
+  font-family: inherit;
+  white-space: nowrap;
+
+  &:hover {
+    background: var(--surface2);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+}

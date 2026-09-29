@@ -1,0 +1,180 @@
+@use '../../styles/variables';
+
+.bg {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.panel {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-xl);
+  width: 100%;
+  max-width: 380px;
+  /* 입력·필터로 항목 수가 변해도 높이 고정 */
+  height: 68vh;
+  max-height: 560px;
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.14);
+  overflow: hidden;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  padding: 11px 14px 10px;
+  border-bottom: 0.5px solid var(--border);
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: 14px;
+  font-weight: 700;
+  flex: 1;
+}
+
+.close {
+  background: none;
+  border: none;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--text3);
+  padding: 0 4px;
+  font-family: inherit;
+
+  &:hover {
+    color: var(--text);
+  }
+}
+
+.searchWrap {
+  padding: 9px 12px;
+  border-bottom: 0.5px solid var(--border);
+  flex-shrink: 0;
+}
+
+.searchInput {
+  width: 100%;
+  height: 32px;
+  padding: 0 10px;
+  border: 0.5px solid var(--border2);
+  border-radius: var(--r-md);
+  font-size: 13px;
+  background: var(--surface2);
+  color: var(--text);
+  outline: none;
+  font-family: inherit;
+
+  &:focus {
+    border-color: var(--teal-mid);
+    background: var(--surface);
+  }
+}
+
+/* 목록 상단 컬럼 헤더 */
+.colHead {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-bottom: 0.5px solid var(--border);
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text2);
+  background: var(--surface2);
+
+  .code, .name {
+    font-weight: 700;
+    color: var(--text2);
+  }
+}
+
+.list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+/* 가상 스크롤 — 전체 높이만큼 자리를 잡고, 보이는 구간만 translateY로 배치 */
+.spacer {
+  position: relative;
+  height: var(--vlist-total, 0);
+}
+
+.viewport {
+  transform: translateY(var(--vlist-offset, 0));
+}
+
+.msg {
+  padding: 24px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text3);
+}
+
+.err {
+  padding: 12px 14px;
+  font-size: 13px;
+  color: var(--coral);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  /* 가상 스크롤 계산과 맞추기 위한 고정 높이 (ITEM_HEIGHT=34) */
+  height: 34px;
+  box-sizing: border-box;
+  padding: 0 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  text-align: left;
+  color: var(--text);
+
+  &:hover {
+    background: var(--surface2);
+  }
+}
+
+/* 키보드(↑↓) 하이라이트 */
+.itemActive {
+  background: var(--teal-bg);
+}
+
+.code {
+  font-size: 12px;
+  color: var(--text2);
+  min-width: 36px;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.sep {
+  color: var(--border2);
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

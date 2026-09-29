@@ -1,0 +1,6 @@
+- [x] Add `remain_valid_days` to schema files, entities, domain models, DTOs, and persistence mapping.
+- [x] Update goods registration and common config synchronization to populate `remain_valid_days`.
+- [x] Extend WMS DTO and aggregated stock evidence fields for freeze-day filtering.
+- [x] Update stock refinement to filter by zone first, then by either valid percent or remain valid days.
+- [x] Update goods status logging to persist the applied evidence value.
+- [x] Add and run focused regression tests plus a broader suite.

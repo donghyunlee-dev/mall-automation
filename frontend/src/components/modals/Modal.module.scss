@@ -1,0 +1,491 @@
+@use '../../styles/variables';
+
+.modalBg {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.32);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 1.3rem 1.3rem 1.2rem;
+  width: 100%;
+  max-width: 420px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+  h3 {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 0.95rem;
+    letter-spacing: -0.25px;
+  }
+}
+
+.modalWide {
+  max-width: 560px;
+}
+
+.placeholderBox {
+  padding: 1rem;
+  border-radius: var(--r-md);
+  background: var(--surface2);
+  color: var(--text2);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.configGuide {
+  margin-bottom: 0.9rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: var(--r-md);
+  background: var(--surface2);
+  color: var(--text2);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.configList {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.configTableWrap {
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+.configTable {
+  width: 100%;
+  /* MemberTable.module.scss의 전역 `table { min-width: 760px }`(요소 선택자라
+     CSS Modules 스코프를 벗어나 전역 적용됨)를 무력화한다 */
+  min-width: 0;
+  table-layout: fixed;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 0.75rem 0.8rem;
+    border-bottom: 0.5px solid var(--border);
+    vertical-align: middle;
+  }
+
+  thead th {
+    background: var(--surface2);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text2);
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  thead th:first-child,
+  tbody th {
+    text-align: left;
+  }
+
+  /* table-layout: fixed는 첫 행(thead) 기준으로 열 폭을 잡으므로
+     '구분' 열은 여기서 좁혀야 실제로 적용된다 */
+  thead th:first-child {
+    width: 56px;
+  }
+
+  tbody th {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text);
+    background: var(--surface);
+    white-space: nowrap;
+  }
+
+  td {
+    background: var(--surface);
+    text-align: center;
+  }
+
+  tr:last-child th,
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  input {
+    width: 100%;
+    max-width: 96px;
+    height: 36px;
+    padding: 0 10px;
+    border: 0.5px solid var(--border2);
+    border-radius: var(--r-md);
+    font-size: 14px;
+    background: var(--surface2);
+    color: var(--text);
+    outline: none;
+    font-family: inherit;
+    text-align: right;
+
+    &:focus {
+      border-color: var(--teal-mid);
+      background: var(--surface);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+      background: var(--surface3);
+    }
+  }
+}
+
+.configSection {
+  padding: 0.95rem;
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+}
+
+.configSectionTitle {
+  margin-bottom: 0.75rem;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.confirmModal {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 1.2rem 1.2rem 1.1rem;
+  width: 100%;
+  max-width: 340px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+
+  h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 0.55rem;
+    letter-spacing: -0.2px;
+  }
+}
+
+.confirmText {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+.confirmStayBtn {
+  height: 36px;
+  min-width: 92px;
+  padding: 0 13px;
+  background: var(--teal);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-md);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.15s, transform 0.1s;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.confirmCloseBtn {
+  height: 36px;
+  min-width: 84px;
+  padding: 0 14px;
+  background: var(--surface);
+  color: var(--text2);
+  border: 0.5px solid var(--border2);
+  border-radius: var(--r-md);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+
+  &:hover {
+    background: var(--surface2);
+    border-color: rgba(0, 0, 0, 0.18);
+    color: var(--text);
+  }
+}
+
+.formRow {
+  margin-bottom: 0.75rem;
+
+  label {
+    display: block;
+    font-size: 12px;
+    color: var(--text);
+    margin-bottom: 5px;
+    font-weight: 700;
+    letter-spacing: -0.1px;
+  }
+
+  input,
+  select {
+    width: 100%;
+    height: 36px;
+    padding: 0 10px;
+    border: 0.5px solid var(--border2);
+    border-radius: var(--r-md);
+    font-size: 14px;
+    background: var(--surface2);
+    color: var(--text);
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.15s;
+
+    &:focus {
+      border-color: var(--teal-mid);
+      background: var(--surface);
+    }
+
+    &:disabled {
+      opacity: 0.38;
+      cursor: default;
+      background: var(--surface3);
+    }
+  }
+}
+
+.criteriaGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+
+  .formRow {
+    margin-bottom: 0;
+  }
+}
+
+.fieldHint {
+  margin-top: 5px;
+  font-size: 12px;
+  color: var(--text3);
+  line-height: 1.5;
+}
+
+.confirmBody {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.confirmName {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.confirmTextBlock {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.65;
+}
+
+.typeSel {
+  display: flex;
+  gap: 8px;
+}
+
+.typeOpt {
+  flex: 1;
+  min-height: 56px;
+  border: 0.5px solid var(--border2);
+  border-radius: var(--r-md);
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+  background: var(--surface2);
+  color: var(--text2);
+  transition: all 0.15s;
+  padding: 7px 8px;
+  line-height: 1.3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  text-align: center;
+
+  &:hover:not(:disabled) {
+    border-color: rgba(0, 0, 0, 0.2);
+    background: #f5f5f5;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+.typeOptTitle {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.1px;
+}
+
+.typeOptDesc {
+  font-size: 11px;
+  font-weight: 400;
+  opacity: 0.65;
+}
+
+.typeOptGeneral {
+  color: var(--teal);
+  border-color: color-mix(in srgb, var(--teal) 28%, transparent);
+  background: var(--teal-bg);
+  font-weight: 500;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--teal) 8%, transparent);
+}
+
+.typeOptExclusive {
+  background: var(--purple-bg);
+  color: var(--purple);
+  border-color: color-mix(in srgb, var(--purple) 55%, transparent);
+  font-weight: 500;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--purple) 8%, transparent);
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 1.2rem;
+  padding-top: 0.05rem;
+}
+
+.btnCancel {
+  height: 35px;
+  padding: 0 15px;
+  background: none;
+  border: 0.5px solid var(--border2);
+  border-radius: var(--r-md);
+  font-size: 14px;
+  cursor: pointer;
+  color: var(--text);
+  font-family: inherit;
+
+  &:hover {
+    background: var(--surface2);
+  }
+}
+
+.btnSave {
+  height: 35px;
+  padding: 0 15px;
+  background: var(--teal);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-md);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.15s;
+
+  &:hover:not(:disabled) {
+    opacity: 0.88;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+}
+
+.btnDelCf {
+  height: 35px;
+  padding: 0 15px;
+  background: var(--coral-mid);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-md);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+
+  &:hover:not(:disabled) {
+    opacity: 0.88;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+}
+
+.errBox {
+  background: var(--coral-bg);
+  border: 0.5px solid color-mix(in srgb, var(--coral) 20%, transparent);
+  border-radius: var(--r-md);
+  padding: 9px 12px;
+  font-size: 13px;
+  color: var(--coral);
+  margin-bottom: 0.85rem;
+  line-height: 1.5;
+}
+
+/* 확인 모달 내용 가운데 정렬 (제목 제외) — 적용하는 요소에만 걸림 */
+.centerText {
+  text-align: center;
+}
+
+
+.warnBox {
+  margin-top: 0.35rem;
+  margin-bottom: 0;
+}
+
+.warnList {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+.warnItem {
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  background: var(--coral-bg);
+  border: 0.5px solid color-mix(in srgb, var(--coral) 20%, transparent);
+}
+
+.warnItemTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--coral);
+  margin-bottom: 3px;
+}
+
+.warnItemDesc {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.5;
+  margin-bottom: 5px;
+  white-space: pre-line;
+}
+
+.warnItemIds {
+  font-size: 12px;
+  color: var(--text);
+  font-weight: 600;
+}
